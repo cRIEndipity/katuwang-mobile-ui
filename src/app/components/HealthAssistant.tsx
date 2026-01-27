@@ -423,8 +423,8 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
     if (!currentSymptom) return;
 
     setSymptomLevel(level);
-    const levelText = level === 1 ? 'Mild' : level === 2 ? 'Moderate' : 'Severe';
-    addMessage('user', `Selected: ${levelText} level`);
+    const levelStars = level === 1 ? '⭐' : level === 2 ? '⭐⭐' : '⭐⭐⭐';
+    addMessage('user', `Selected: ${levelStars}`);
 
     await simulateTyping(1200);
 
@@ -432,9 +432,10 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                          level === 2 ? currentSymptom.level2 : 
                          currentSymptom.level3;
 
-    let response = `## ${currentSymptom.name} - ${levelText} Level\n\n`;
+    let response = `## ${currentSymptom.name} - ${levelStars}\n\n`;
     
-    response += `**Symptoms indicating ${levelText.toLowerCase()} level:**\n`;
+    const levelName = level === 1 ? 'Mild' : level === 2 ? 'Moderate' : 'Severe';
+    response += `**Symptoms indicating ${levelName.toLowerCase()} severity:**\n`;
     levelSymptoms.forEach(symptom => {
       response += `• ${symptom}\n`;
     });
@@ -569,10 +570,10 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
 
   const getLevelIcon = (level: number) => {
     switch (level) {
-      case 1: return '🟢';
-      case 2: return '🟡';
-      case 3: return '🔴';
-      default: return '⚪';
+      case 1: return '⭐';
+      case 2: return '⭐⭐';
+      case 3: return '⭐⭐⭐';
+      default: return '○';
     }
   };
 
@@ -589,67 +590,22 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
               >
                 <ChevronLeft className="w-5 h-5 text-muted-foreground" />
               </button>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center shadow-sm">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-base font-bold text-foreground">Health Assistant</h1>
-                  <div className="flex items-center gap-1.5">
-                    <div className="flex items-center gap-1">
-                      <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                      <span className="text-xs text-muted-foreground">Connected</span>
-                    </div>
-                    <span className="text-xs text-muted-foreground">•</span>
-                    <span className="text-xs text-primary font-medium">Naga City Health</span>
-                  </div>
+              <div>
+                <h1 className="text-base font-bold text-foreground">Health Assistant</h1>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-muted-foreground">Naga City Health</span>
                 </div>
               </div>
             </div>
             
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => onNavigate('contacts')}
-                className="p-2 hover:bg-muted rounded-lg transition-colors"
-                title="Health Contacts"
-              >
-                <Phone className="w-5 h-5 text-muted-foreground" />
-              </button>
-              <button
-                onClick={() => onNavigate('emergency')}
-                className="flex items-center gap-2 bg-destructive text-destructive-foreground px-3 py-2 rounded-lg font-medium transition-all hover:bg-destructive-hover active:scale-95 shadow-sm"
-              >
-                <AlertTriangle className="w-4 h-4" />
-                <span className="text-sm">Emergency</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Categories */}
-      <div className="px-4 py-3 bg-muted/30 border-b border-border">
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-2 min-w-max">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => handleCategorySelect(category.id)}
-                className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border transition-all hover:scale-[1.02] active:scale-[0.98] ${category.bgColor} border-border hover:border-primary/20 min-w-[140px]`}
-              >
-                <div className={`${category.color} p-1.5 rounded-md bg-white/50`}>
-                  {category.icon}
-                </div>
-                <div className="text-left">
-                  <div className="text-xs font-semibold text-foreground whitespace-nowrap">
-                    {category.name}
-                  </div>
-                  <div className="text-[10px] text-muted-foreground truncate">
-                    {category.description}
-                  </div>
-                </div>
-              </button>
-            ))}
+            <button
+              onClick={() => onNavigate('emergency')}
+              className="p-2 hover:bg-destructive/10 rounded-lg transition-colors"
+              title="Emergency"
+            >
+              <AlertTriangle className="w-5 h-5 text-destructive" />
+            </button>
           </div>
         </div>
       </div>
@@ -722,8 +678,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
 
                 {message.symptomLevel && (
                   <div className={`mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${getLevelColor(message.symptomLevel)}`}>
-                    {getLevelIcon(message.symptomLevel)}
-                    <span>Level {message.symptomLevel}</span>
+                    <span>{getLevelIcon(message.symptomLevel)}</span>
                   </div>
                 )}
 
@@ -765,11 +720,13 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                       icon = <ChevronLeft className="w-3.5 h-3.5" />;
                     } else if (option.startsWith('level')) {
                       const level = parseInt(option.replace('level', ''));
-                      label = `Level ${level} - ${level === 1 ? 'Mild' : level === 2 ? 'Moderate' : 'Severe'}`;
+                      const stars = level === 1 ? '⭐' : level === 2 ? '⭐⭐' : '⭐⭐⭐';
+                      const severity = level === 1 ? 'Mild' : level === 2 ? 'Moderate' : 'Severe';
+                      label = `${stars} - ${severity}`;
                       color = level === 1 ? 'bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border-emerald-200' :
                               level === 2 ? 'bg-amber-100 hover:bg-amber-200 text-amber-700 border-amber-200' :
                               'bg-red-100 hover:bg-red-200 text-red-700 border-red-200';
-                      icon = <AlertCircle className="w-3.5 h-3.5" />;
+                      icon = <Star className="w-3.5 h-3.5" />;
                     } else if (option === 'call-911') {
                       label = '🚨 Call Emergency Services';
                       color = 'bg-destructive/10 hover:bg-destructive/20 text-destructive border-destructive/20';
