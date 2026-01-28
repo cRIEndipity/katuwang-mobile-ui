@@ -18,7 +18,7 @@ import {
   Zap
 } from 'lucide-react';
 
-type Screen = 'entry' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts' | 'health-records';
+type Screen = 'user-type' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts' | 'health-records';
 
 interface DashboardProps {
   onNavigate: (screen: Screen) => void;

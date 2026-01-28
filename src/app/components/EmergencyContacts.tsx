@@ -18,7 +18,7 @@ import {
   BadgeCheck
 } from 'lucide-react';
 
-type Screen = 'entry' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts';
+type Screen = 'user-type' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts' | 'health-records';
 type UserType = 'patient' | 'professional' | null;
 
 interface EmergencyContactsProps {
@@ -168,11 +168,11 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.background }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#FAFBFC' }}>
       {/* Header */}
       <div 
         className="px-6 pt-8 pb-6 text-white"
-        style={{ backgroundColor: BRAND_COLORS.secondary }}
+        style={{ backgroundColor: '#1D62AF' }}
       >
         <div className="flex items-center justify-between mb-6">
           <button 
@@ -205,7 +205,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
       </div>
 
       {/* Stats Bar */}
-      <div className="px-6 py-4" style={{ backgroundColor: BRAND_COLORS.surface }}>
+      <div className="px-6 py-4" style={{ backgroundColor: '#FFFFFF' }}>
         <div className="flex items-center justify-between">
           <div>
             <div className="text-sm font-medium" style={{ color: BRAND_COLORS.textSecondary }}>
@@ -229,12 +229,12 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
         <div 
           className="rounded-xl p-4 border"
           style={{ 
-            backgroundColor: `${BRAND_COLORS.secondary}08`,
+            backgroundColor: 'rgba(29, 98, 175, 0.08)',
             borderColor: BRAND_COLORS.border
           }}
         >
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${BRAND_COLORS.secondary}20` }}>
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(29, 98, 175, 0.2)' }}>
               <AlertCircle className="w-5 h-5" style={{ color: BRAND_COLORS.secondary }} />
             </div>
             <div>
@@ -255,7 +255,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
           <h2 className="text-base font-semibold" style={{ color: BRAND_COLORS.textPrimary }}>
             Emergency Contacts
           </h2>
-          <span className="text-xs font-medium px-2 py-1 rounded-full" style={{ backgroundColor: `${BRAND_COLORS.primary}15`, color: BRAND_COLORS.primary }}>
+          <span className="text-xs font-medium px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(247, 80, 47, 0.15)', color: BRAND_COLORS.primary }}>
             {contacts.length} saved
           </span>
         </div>
@@ -268,7 +268,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
               borderColor: BRAND_COLORS.border
             }}
           >
-            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.secondary}10` }}>
+            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: 'rgba(29, 98, 175, 0.1)' }}>
               <Users className="w-8 h-8" style={{ color: BRAND_COLORS.secondary }} />
             </div>
             <h3 className="text-lg font-semibold mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
@@ -312,7 +312,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                             {contact.name}
                           </h3>
                           {contact.isPrimary && (
-                            <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: `${BRAND_COLORS.success}15`, color: BRAND_COLORS.success }}>
+                            <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: 'rgba(0, 166, 81, 0.15)', color: BRAND_COLORS.success }}>
                               Primary
                             </span>
                           )}
@@ -331,7 +331,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                       href={`tel:${contact.phone}`}
                       className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group"
                     >
-                      <div className="w-8 h-8 rounded-md flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.secondary}10` }}>
+                      <div className="w-8 h-8 rounded-md flex items-center justify-center" style={{ backgroundColor: 'rgba(29, 98, 175, 0.1)' }}>
                         <Phone className="w-4 h-4" style={{ color: BRAND_COLORS.secondary }} />
                       </div>
                       <div className="flex-1">
@@ -350,7 +350,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                         href={`mailto:${contact.email}`}
                         className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group"
                       >
-                        <div className="w-8 h-8 rounded-md flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.secondary}10` }}>
+                        <div className="w-8 h-8 rounded-md flex items-center justify-center" style={{ backgroundColor: 'rgba(29, 98, 175, 0.1)' }}>
                           <Mail className="w-4 h-4" style={{ color: BRAND_COLORS.secondary }} />
                         </div>
                         <div className="flex-1">
@@ -371,7 +371,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                         onClick={() => handleSetPrimary(contact.id)}
                         className="flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-all active:scale-95"
                         style={{ 
-                          backgroundColor: `${BRAND_COLORS.secondary}10`,
+                          backgroundColor: 'rgba(29, 98, 175, 0.1)',
                           color: BRAND_COLORS.secondary
                         }}
                       >
@@ -382,7 +382,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                       onClick={() => openEditModal(contact)}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium transition-all active:scale-95"
                       style={{ 
-                        backgroundColor: `${BRAND_COLORS.secondary}10`,
+                        backgroundColor: 'rgba(29, 98, 175, 0.1)',
                         color: BRAND_COLORS.secondary
                       }}
                     >
@@ -393,7 +393,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                       onClick={() => openDeleteModal(contact)}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium transition-all active:scale-95"
                       style={{ 
-                        backgroundColor: `${BRAND_COLORS.primary}10`,
+                        backgroundColor: 'rgba(247, 80, 47, 0.1)',
                         color: BRAND_COLORS.primary
                       }}
                     >
@@ -559,13 +559,149 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
         </div>
       )}
 
+      {/* Edit Contact Modal */}
+      {showEditModal && selectedContact && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
+            {/* Modal Header */}
+            <div 
+              className="px-6 py-5 text-white"
+              style={{ backgroundColor: BRAND_COLORS.secondary }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)' }}>
+                    <Edit2 className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold">Edit Contact</h2>
+                    <p className="text-white/80 text-sm">Update contact information</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowEditModal(false);
+                    setSelectedContact(null);
+                    resetForm();
+                  }}
+                  className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Form */}
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  value={formName}
+                  onChange={(e) => setFormName(e.target.value)}
+                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+                    formErrors.name 
+                      ? 'border-red-300 focus:border-red-500 focus:ring-red-100' 
+                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
+                  }`}
+                  placeholder="Enter full name"
+                  style={{ backgroundColor: BRAND_COLORS.background }}
+                />
+                {formErrors.name && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.name}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
+                  Relationship *
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {relationshipOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => setFormRelationship(option.value)}
+                      className={`py-2.5 rounded-lg border text-sm font-medium transition-all ${
+                        formRelationship === option.value
+                          ? 'border-blue-500 text-blue-600'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                      style={{
+                        backgroundColor: formRelationship === option.value 
+                          ? `${BRAND_COLORS.secondary}10` 
+                          : 'white'
+                      }}
+                    >
+                      <div className="text-lg mb-1">{option.icon}</div>
+                      <div>{option.value}</div>
+                    </button>
+                  ))}
+                </div>
+                {formErrors.relationship && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.relationship}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
+                  Mobile Number *
+                </label>
+                <input
+                  type="tel"
+                  value={formPhone}
+                  onChange={(e) => setFormPhone(e.target.value)}
+                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${
+                    formErrors.phone 
+                      ? 'border-red-300 focus:border-red-500 focus:ring-red-100' 
+                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
+                  }`}
+                  placeholder="09171234567"
+                  style={{ backgroundColor: BRAND_COLORS.background }}
+                />
+                {formErrors.phone && (
+                  <p className="text-red-600 text-xs mt-1">{formErrors.phone}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
+                  Email Address (Optional)
+                </label>
+                <input
+                  type="email"
+                  value={formEmail}
+                  onChange={(e) => setFormEmail(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:ring-offset-1"
+                  placeholder="email@example.com"
+                  style={{ backgroundColor: BRAND_COLORS.background }}
+                />
+              </div>
+
+              <div className="pt-2">
+                <button
+                  onClick={handleEditSubmit}
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-medium text-white transition-all active:scale-95"
+                  style={{ backgroundColor: BRAND_COLORS.secondary }}
+                >
+                  <Check className="w-5 h-5" />
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Delete Confirmation Modal */}
       {showDeleteModal && selectedContact && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
             <div 
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ backgroundColor: `${BRAND_COLORS.primary}10` }}
+              style={{ backgroundColor: 'rgba(247, 80, 47, 0.1)' }}
             >
               <Trash2 className="w-6 h-6" style={{ color: BRAND_COLORS.primary }} />
             </div>
