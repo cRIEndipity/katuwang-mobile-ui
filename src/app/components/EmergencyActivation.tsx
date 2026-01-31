@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import {
-  ChevronLeft,
   AlertTriangle,
   Phone,
   MapPin,
@@ -15,7 +14,6 @@ import {
   UserCheck,
   Battery,
   Wifi,
-  Signal,
   ChevronRight,
   ArrowLeft
 } from 'lucide-react';
@@ -253,13 +251,7 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
   return (
     <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.surface }}>
       {/* Status Bar */}
-      <div className="status-bar">
-        <div className="time">9:41</div>
-        <div className="status-icons">
-          <Wifi size={16} style={{ color: BRAND_COLORS.primary }} />
-          <Battery size={16} style={{ color: BRAND_COLORS.primary }} />
-        </div>
-      </div>
+
 
       {/* Header Section */}
       <div
@@ -462,18 +454,38 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
       </div>
 
       {/* Activation Button - Fixed Bottom */}
-      <div className="fixed bottom-0 left-0 right-0 p-6" style={{ backgroundColor: BRAND_COLORS.surface }}>
+      <div
+        className="fixed bottom-0 left-0 right-0 p-6 border-t shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]"
+        style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(10px)',
+          borderColor: 'rgba(0,0,0,0.05)'
+        }}
+      >
         <div className="max-w-md mx-auto">
-          <button
-            onClick={() => setShowConfirmModal(true)}
-            className="w-full rounded-xl shadow-xl py-5 font-bold flex items-center justify-center gap-2 text-lg transition-all active:scale-[0.98] hover:shadow-2xl"
-            style={{ backgroundColor: BRAND_COLORS.danger, color: 'white' }}
-          >
-            <AlertTriangle className="w-6 h-6" />
-            ACTIVATE EMERGENCY ALERT
-          </button>
-          <p className="text-center text-xs text-gray-500 mt-2">
-            This will immediately notify emergency services
+          <div className="relative group">
+            <div
+              className="absolute -inset-1 rounded-2xl opacity-25 group-hover:opacity-50 blur transition duration-200"
+              style={{ backgroundColor: BRAND_COLORS.danger }}
+            />
+            <button
+              onClick={() => setShowConfirmModal(true)}
+              className="relative w-full rounded-xl py-5 font-bold flex items-center justify-center gap-3 text-lg transition-all active:scale-[0.98]"
+              style={{
+                background: `linear-gradient(to right, ${BRAND_COLORS.danger}, #DC2626)`,
+                color: 'white',
+                boxShadow: `0 4px 14px 0 rgba(220, 38, 38, 0.39)`
+              }}
+            >
+              <div className="p-1 bg-white/20 rounded-full">
+                <AlertTriangle className="w-4 h-4" fill="white" />
+              </div>
+              <span className="tracking-wide">ACTIVATE EMERGENCY ALERT</span>
+            </button>
+          </div>
+          <p className="text-center text-xs font-medium text-gray-500 mt-3 flex items-center justify-center gap-1">
+            <Shield className="w-3 h-3" />
+            Double-tap confirmation required
           </p>
         </div>
       </div>

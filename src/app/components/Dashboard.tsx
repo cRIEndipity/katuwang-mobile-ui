@@ -4,17 +4,11 @@ import {
   Bot,
   Hospital,
   Users,
-  Clock,
   Phone,
-  Heart,
-  Pill,
   FileText,
-  Video,
   Lightbulb,
   Stethoscope,
-  Activity,
   AlertCircle,
-  Calendar,
   Zap
 } from 'lucide-react';
 
@@ -131,70 +125,6 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
     }
   };
 
-  const renderHealthServiceCard = (service: any) => {
-    if (service.isEmergency) {
-      return (
-        <button
-          key={service.id}
-          onClick={() => handleServiceClick(service.id)}
-          className="w-full text-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 p-5 flex flex-col items-center justify-center gap-3 group active:scale-[0.98]"
-          style={{ backgroundColor: BRAND_COLORS.danger }}
-        >
-          <div className="relative">
-            <div className="p-3 rounded-full bg-white/20 backdrop-blur-sm">
-              <AlertCircle className="w-7 h-7 text-white" fill="currentColor" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-white rounded-full flex items-center justify-center">
-              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-          <div className="text-center">
-            <h3 className="font-bold text-base mb-1">Emergency Alert</h3>
-            <p className="text-white/90 text-xs font-medium">Immediate assistance</p>
-          </div>
-          <div className="flex items-center gap-1 mt-1">
-            <Zap className="w-3 h-3 animate-pulse" fill="white" />
-            <span className="text-xs font-semibold">24/7 ACTIVE</span>
-          </div>
-        </button>
-      );
-    }
-
-    return (
-      <button
-        key={service.id}
-        onClick={() => handleServiceClick(service.id)}
-        className="w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-5 border flex flex-col items-center text-center gap-3 group hover:border-blue-100 active:scale-[0.98]"
-        style={{ borderColor: BRAND_COLORS.surface }}
-      >
-        <div
-          className="p-3 rounded-lg transition-transform duration-200 group-hover:scale-110"
-          style={{ backgroundColor: `${service.iconColor}15` }}
-        >
-          <service.icon className="w-7 h-7" style={{ color: service.iconColor }} strokeWidth={2} />
-        </div>
-        <div className="flex-1">
-          <h3 className="font-semibold text-sm mb-1" style={{ color: BRAND_COLORS.textPrimary }}>
-            {service.title}
-          </h3>
-          <p className="text-xs" style={{ color: BRAND_COLORS.textSecondary }}>
-            {service.description}
-          </p>
-        </div>
-        {service.status && (
-          <div
-            className="font-medium text-xs px-2.5 py-1 rounded-full"
-            style={{
-              backgroundColor: `${service.statusColor}15`,
-              color: service.statusColor
-            }}
-          >
-            {service.status}
-          </div>
-        )}
-      </button>
-    );
-  };
 
   const renderMedicalServiceItem = (service: any) => (
     <button
@@ -204,7 +134,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
       style={{ borderColor: BRAND_COLORS.surface }}
     >
       <div
-        className="p-3 rounded-lg transition-transform duration-200 group-hover:scale-110"
+        className="p-3 rounded-lg transition-transform duration-200 group-hover:scale-110 flex-shrink-0"
         style={{ backgroundColor: `${service.iconColor}15` }}
       >
         <service.icon className="w-6 h-6" style={{ color: service.iconColor }} strokeWidth={2} />
@@ -214,16 +144,16 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
           <h3 className="font-semibold text-base" style={{ color: BRAND_COLORS.textPrimary }}>
             {service.title}
           </h3>
-          {service.badge && (
-            <span
-              className="font-medium text-xs px-2 py-1 rounded-full"
+          {service.status && (
+            <div
+              className="font-medium text-xs px-2.5 py-1 rounded-full"
               style={{
-                backgroundColor: `${BRAND_COLORS.primary}15`,
-                color: BRAND_COLORS.primary
+                backgroundColor: `${service.statusColor}15`,
+                color: service.statusColor
               }}
             >
-              {service.badge}
-            </span>
+              {service.status}
+            </div>
           )}
         </div>
         <p className="text-sm mt-1" style={{ color: BRAND_COLORS.textSecondary }}>
@@ -254,6 +184,9 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             <div className="text-right">
               <div className="text-lg font-bold">
                 {formatTime(currentTime)}
+              </div>
+              <div className="text-xs text-white/80 font-medium">
+                {formatDay(currentTime)}, {formatDate(currentTime)}
               </div>
             </div>
           </div>
@@ -337,45 +270,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
                 );
               }
 
-              return (
-                <button
-                  key={service.id}
-                  onClick={() => handleServiceClick(service.id)}
-                  className="w-full bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-5 border flex items-center gap-4 group hover:border-blue-100 active:scale-[0.98]"
-                  style={{ borderColor: BRAND_COLORS.surface }}
-                >
-                  <div
-                    className="p-3 rounded-lg transition-transform duration-200 group-hover:scale-110 flex-shrink-0"
-                    style={{ backgroundColor: `${service.iconColor}15` }}
-                  >
-                    <service.icon className="w-6 h-6" style={{ color: service.iconColor }} strokeWidth={2} />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-base" style={{ color: BRAND_COLORS.textPrimary }}>
-                        {service.title}
-                      </h3>
-                      {service.status && (
-                        <div
-                          className="font-medium text-xs px-2.5 py-1 rounded-full"
-                          style={{
-                            backgroundColor: `${service.statusColor}15`,
-                            color: service.statusColor
-                          }}
-                        >
-                          {service.status}
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-sm mt-1" style={{ color: BRAND_COLORS.textSecondary }}>
-                      {service.description}
-                    </p>
-                  </div>
-                  <div className="text-gray-400">
-                    <ChevronLeft className="w-5 h-5 transform rotate-180" />
-                  </div>
-                </button>
-              );
+              return renderMedicalServiceItem(service);
             })}
           </div>
         </section>

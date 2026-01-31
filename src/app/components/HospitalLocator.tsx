@@ -271,7 +271,7 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
           className="mb-4 flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <ChevronLeft className="w-5 h-5" />
-          <span className="font-medium">Back to Dashboard</span>
+          <span className="font-medium text-sm">Back to Dashboard</span>
         </button>
 
         <div className="flex items-center gap-3">
