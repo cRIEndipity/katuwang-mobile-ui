@@ -7,6 +7,7 @@
  */
 
 import { useState } from "react";
+import { Screen } from "./types";
 import UserTypeSelection from "./components/UserTypeSelection";
 import Dashboard from "./components/Dashboard";
 import HealthAssistant from "./components/HealthAssistant";
@@ -15,15 +16,8 @@ import HospitalLocator from "./components/HospitalLocator";
 import EmergencyContacts from "./components/EmergencyContacts";
 import HealthRecords from "./components/HealthRecords";
 
-type Screen =
-  | "user-type"
-  | "dashboard"
-  | "health-assistant"
-  | "emergency"
-  | "hospitals"
-  | "contacts"
-  | "health-records";
-type UserType = "patient" | null;
+
+
 
 export default function App() {
   const [currentScreen, setCurrentScreen] =
@@ -37,17 +31,14 @@ export default function App() {
     setCurrentScreen(screen);
   };
 
-  const handleBack = () => {
-    setCurrentScreen("user-type");
-  };
+
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-md min-h-screen">
         {currentScreen === "user-type" && (
-          <UserTypeSelection 
+          <UserTypeSelection
             onSelect={handleHealthSelect}
-            onBack={() => {}} 
           />
         )}
         {currentScreen === "dashboard" && (
@@ -74,7 +65,7 @@ export default function App() {
         {currentScreen === "contacts" && (
           <EmergencyContacts
             onNavigate={navigateTo}
-            userType={userType}
+
           />
         )}
         {currentScreen === "health-records" && (

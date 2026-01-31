@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { ChevronLeft, FileText, Download, Share2, Calendar, Activity, Heart, Pill, AlertCircle, Check, Copy, Mail } from 'lucide-react';
 
-type Screen = 'health-records' | 'dashboard' | 'entry' | 'telemedicine' | 'pharmacy' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts';
+import { Screen } from "../types";
 
 interface HealthRecordsProps {
   onNavigate: (screen: Screen) => void;
@@ -19,16 +19,7 @@ interface MedicalRecord {
   status: 'active' | 'completed' | 'archived';
 }
 
-const BRAND_COLORS = {
-  primary: '#F7502F',      // Naga Coral
-  secondary: '#1D62AF',    // Fun Blue
-  success: '#00A651',      // Success Green
-  background: '#FAFBFC',   // Athens Gray
-  textDark: '#1A202C',
-  textMid: '#4A5568',
-  textLight: '#718096',
-  border: '#E2E8F0',
-};
+import { BRAND_COLORS } from '../../constants/colors';
 
 const mockRecords: MedicalRecord[] = [
   {
@@ -166,7 +157,7 @@ export default function HealthRecords({ onNavigate }: HealthRecordsProps) {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.background }}>
+    <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.surface }}>
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white border-b shadow-sm">
         <div className="p-6">
@@ -176,7 +167,7 @@ export default function HealthRecords({ onNavigate }: HealthRecordsProps) {
               else onNavigate('dashboard');
             }}
             className="flex items-center gap-2 mb-4"
-            style={{ color: BRAND_COLORS.secondary }}
+            style={{ color: BRAND_COLORS.primary }}
           >
             <ChevronLeft className="w-5 h-5" />
             <span className="font-semibold">Back</span>
@@ -195,18 +186,17 @@ export default function HealthRecords({ onNavigate }: HealthRecordsProps) {
                 <button
                   key={status}
                   onClick={() => setFilterStatus(status as any)}
-                  className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all ${
-                    filterStatus === status
-                      ? 'text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                  style={filterStatus === status ? { backgroundColor: BRAND_COLORS.secondary } : {}}
+                  className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all ${filterStatus === status
+                    ? 'text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  style={filterStatus === status ? { backgroundColor: BRAND_COLORS.primary } : {}}
                 >
                   {status === 'all'
                     ? 'All Records'
                     : status === 'active'
-                    ? 'Active'
-                    : 'Completed'}
+                      ? 'Active'
+                      : 'Completed'}
                 </button>
               ))}
             </div>
@@ -270,7 +260,7 @@ export default function HealthRecords({ onNavigate }: HealthRecordsProps) {
               <p className="text-sm text-gray-600 mb-4">
                 Upload your medical records from other facilities
               </p>
-              
+
               {uploadSuccess ? (
                 <div className="w-full py-3 px-4 rounded-lg bg-green-100 text-green-700 font-semibold transition-all flex items-center justify-center gap-2">
                   <Check className="w-5 h-5" />
@@ -282,15 +272,15 @@ export default function HealthRecords({ onNavigate }: HealthRecordsProps) {
                     Uploading: {Math.floor(uploadProgress)}%
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="bg-blue-500 h-2 rounded-full transition-all duration-200" 
+                    <div
+                      className="bg-blue-500 h-2 rounded-full transition-all duration-200"
                       style={{ width: `${uploadProgress}%` }}
                     />
                   </div>
                 </div>
               ) : (
                 <label className="w-full cursor-pointer">
-                  <input 
+                  <input
                     ref={fileInputRef}
                     type="file"
                     accept=".pdf,.doc,.docx,.jpg,.png"
@@ -379,59 +369,59 @@ export default function HealthRecords({ onNavigate }: HealthRecordsProps) {
                 </div>
               ) : downloadProgress > 0 && downloadProgress < 100 ? (
                 <div>
-                  <div className="w-full py-3 rounded-lg text-white font-semibold transition-all flex items-center justify-center gap-2 mb-3" style={{ backgroundColor: BRAND_COLORS.secondary }}>
+                  <div className="w-full py-3 rounded-lg text-white font-semibold transition-all flex items-center justify-center gap-2 mb-3" style={{ backgroundColor: BRAND_COLORS.primary }}>
                     <Download className="w-5 h-5" />
                     Downloading: {Math.floor(downloadProgress)}%
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="h-2 rounded-full transition-all duration-200" 
-                      style={{ width: `${downloadProgress}%`, backgroundColor: BRAND_COLORS.secondary }}
+                    <div
+                      className="h-2 rounded-full transition-all duration-200"
+                      style={{ width: `${downloadProgress}%`, backgroundColor: BRAND_COLORS.primary }}
                     />
                   </div>
                 </div>
               ) : (
-                <button 
+                <button
                   onClick={handleDownloadPDF}
-                  className="w-full py-3 rounded-lg text-white font-semibold transition-all flex items-center justify-center gap-2 hover:opacity-90" 
-                  style={{ backgroundColor: BRAND_COLORS.secondary }}
+                  className="w-full py-3 rounded-lg text-white font-semibold transition-all flex items-center justify-center gap-2 hover:opacity-90"
+                  style={{ backgroundColor: BRAND_COLORS.primary }}
                 >
                   <Download className="w-5 h-5" />
                   Download PDF
                 </button>
               )}
-              
+
               {shareSuccess ? (
-                <div className="w-full py-3 rounded-lg text-center font-semibold transition-all flex items-center justify-center gap-2 animate-pulse" style={{ backgroundColor: '#E8F4F8', color: BRAND_COLORS.secondary }}>
+                <div className="w-full py-3 rounded-lg text-center font-semibold transition-all flex items-center justify-center gap-2 animate-pulse" style={{ backgroundColor: '#E8F4F8', color: BRAND_COLORS.primary }}>
                   <Check className="w-5 h-5" />
                   Record Shared Successfully!
                 </div>
               ) : shareMethod ? (
                 <div className="space-y-2">
-                  <div className="w-full py-3 rounded-lg text-center text-white font-semibold" style={{ backgroundColor: BRAND_COLORS.secondary }}>
+                  <div className="w-full py-3 rounded-lg text-center text-white font-semibold" style={{ backgroundColor: BRAND_COLORS.primary }}>
                     {shareMethod === 'email' ? 'Sending via Email...' : 'Generating Share Link...'}
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div 
-                      className="h-2 rounded-full transition-all duration-300 animate-pulse" 
-                      style={{ width: '100%', backgroundColor: BRAND_COLORS.secondary }}
+                    <div
+                      className="h-2 rounded-full transition-all duration-300 animate-pulse"
+                      style={{ width: '100%', backgroundColor: BRAND_COLORS.primary }}
                     />
                   </div>
                 </div>
               ) : (
                 <div className="space-y-2">
-                  <button 
+                  <button
                     onClick={() => handleShareRecord('email')}
-                    className="w-full py-3 rounded-lg border-2 text-gray-700 font-semibold hover:bg-gray-50 transition-all flex items-center justify-center gap-2" 
-                    style={{ borderColor: BRAND_COLORS.secondary, color: BRAND_COLORS.secondary }}
+                    className="w-full py-3 rounded-lg border-2 text-gray-700 font-semibold hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                    style={{ borderColor: BRAND_COLORS.primary, color: BRAND_COLORS.primary }}
                   >
                     <Mail className="w-5 h-5" />
                     Share via Email
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleShareRecord('link')}
-                    className="w-full py-3 rounded-lg border-2 text-gray-700 font-semibold hover:bg-gray-50 transition-all flex items-center justify-center gap-2" 
-                    style={{ borderColor: BRAND_COLORS.secondary, color: BRAND_COLORS.secondary }}
+                    className="w-full py-3 rounded-lg border-2 text-gray-700 font-semibold hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
+                    style={{ borderColor: BRAND_COLORS.primary, color: BRAND_COLORS.primary }}
                   >
                     <Copy className="w-5 h-5" />
                     Copy Share Link

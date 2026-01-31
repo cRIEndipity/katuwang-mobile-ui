@@ -1,23 +1,21 @@
 import { useState, useEffect, useRef, KeyboardEvent, ReactNode } from 'react';
-import { 
-  ChevronLeft, 
-  Bot, 
-  Send, 
-  Menu, 
-  AlertTriangle, 
-  Clock, 
-  Heart, 
-  Stethoscope, 
-  Pill, 
-  Activity, 
-  Shield, 
-  Baby, 
-  Home, 
-  MessageSquare, 
-  X, 
-  User,
+import {
+  ChevronLeft,
+  Bot,
+  Send,
+  Menu,
+  AlertTriangle,
+  Clock,
+  Heart,
+  Stethoscope,
+  Pill,
+  Activity,
+  Shield,
+  Baby,
+  Home,
+  MessageSquare,
+  X,
   Thermometer,
-  Brain,
   HeartPulse,
   ActivitySquare,
   Calendar,
@@ -32,7 +30,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 
-type Screen = 'entry' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts';
+import { Screen } from "../types";
 
 interface HealthAssistantProps {
   onNavigate: (screen: Screen) => void;
@@ -314,6 +312,100 @@ const symptoms: Symptom[] = [
       'Family history of heart disease',
       'Multiple risk factors (smoking, diabetes, hypertension)'
     ]
+  },
+  {
+    id: 'abdominal-pain',
+    name: 'Abdominal Pain',
+    description: 'Stomach and digestive system assessment',
+    level1: [
+      'Mild stomach ache or cramping',
+      'Gas or bloating',
+      'Mild nausea without vomiting',
+      'Constipation',
+      'Can move and walk normally'
+    ],
+    level2: [
+      'Constant pain or discomfort',
+      'Vomiting or diarrhea',
+      'Low grade fever',
+      'Pain worsens after eating',
+      'Localized tenderness'
+    ],
+    level3: [
+      'Severe, sharp, or tearing pain',
+      'Rigid or very tender abdomen',
+      'Vomiting blood or "coffee grounds"',
+      'Bloody or black stools',
+      'Inability to pass stool or gas',
+      'Pregnant with abdominal pain'
+    ],
+    emergencyActions: [
+      'Seek immediate emergency care',
+      'Do not eat or drink anything',
+      'Do not take pain medication until evaluated',
+      'Lie still in comfortable position'
+    ],
+    nextSteps: [
+      'Rest digestive system (clear liquids)',
+      'Avoid solid foods initially',
+      'Monitor hydration status',
+      'Use heating pad for comfort',
+      'Follow BRAT diet when eating resumes'
+    ],
+    whenToSeekHelp: [
+      'Pain > 24 hours',
+      'Fever > 38.5°C',
+      'Dehydration signs',
+      'Possible pregnancy',
+      'Recent abdominal injury'
+    ]
+  },
+  {
+    id: 'back-pain',
+    name: 'Back Pain',
+    description: 'Spine and prolonged back discomfort',
+    level1: [
+      'Stiffness or soreness',
+      'After physical exertion',
+      'Relieved by rest or changing position',
+      'Full range of motion preserved',
+      'No radiation to legs'
+    ],
+    level2: [
+      'Persistent ache',
+      'Radiates to one leg (above knee)',
+      'Muscle spasms',
+      'Pain limits daily activities',
+      'Lasts > 1 week'
+    ],
+    level3: [
+      'Loss of bladder/bowel control',
+      'Numbness or weakness in legs',
+      'Pain radiates below knee',
+      'History of cancer',
+      'Associated with fever',
+      'After severe trauma (fall/accident)'
+    ],
+    emergencyActions: [
+      'Go to ER immediately for bowel/bladder loss',
+      'Immobilize if trauma suspected',
+      'Do not heat injured area initially',
+      'Neurological evaluation needed'
+    ],
+    nextSteps: [
+      'Alternate heat and cold therapy',
+      'Gentle stretching exercises',
+      'OTC anti-inflammatory medication',
+      'Maintain good posture',
+      'Avoid heavy lifting'
+    ],
+    whenToSeekHelp: [
+      'Unexplained weight loss',
+      'Constant pain at night',
+      'History of steroid use',
+      'Pain > 4 weeks',
+      'Leg weakness'
+    ]
   }
 ];
 
@@ -345,7 +437,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
   const [isTyping, setIsTyping] = useState(false);
   const [currentSymptom, setCurrentSymptom] = useState<Symptom | null>(null);
   const [symptomLevel, setSymptomLevel] = useState<number>(0);
-  const [chatHistory, setChatHistory] = useState<Array<{role: string, content: string}>>([]);
+  const [chatHistory, setChatHistory] = useState<Array<{ role: string, content: string }>>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -366,7 +458,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
       symptomLevel
     };
     setMessages(prev => [...prev, newMessage]);
-    setChatHistory(prev => [...prev, {role: type === 'user' ? 'user' : 'assistant', content}]);
+    setChatHistory(prev => [...prev, { role: type === 'user' ? 'user' : 'assistant', content }]);
   };
 
   const simulateTyping = (duration: number = 1000) => {
@@ -385,7 +477,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
 
     setSelectedCategory(categoryId);
     addMessage('user', `Selected: ${category.name}`);
-    
+
     await simulateTyping(800);
 
     if (categoryId === 'symptoms') {
@@ -428,12 +520,12 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
 
     await simulateTyping(1200);
 
-    const levelSymptoms = level === 1 ? currentSymptom.level1 : 
-                         level === 2 ? currentSymptom.level2 : 
-                         currentSymptom.level3;
+    const levelSymptoms = level === 1 ? currentSymptom.level1 :
+      level === 2 ? currentSymptom.level2 :
+        currentSymptom.level3;
 
     let response = `## ${currentSymptom.name} - ${levelStars}\n\n`;
-    
+
     const levelName = level === 1 ? 'Mild' : level === 2 ? 'Moderate' : 'Severe';
     response += `**Symptoms indicating ${levelName.toLowerCase()} severity:**\n`;
     levelSymptoms.forEach(symptom => {
@@ -462,9 +554,9 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
     response += `📞 Health Hotline: 1555\n`;
     response += `🏥 Emergency Services: Available 24/7`;
 
-    addMessage('bot', response, 
-      level === 3 ? ['call-911', 'find-hospital', 'back'] : 
-      ['monitor-symptoms', 'schedule-appointment', 'find-clinic', 'back']
+    addMessage('bot', response,
+      level === 3 ? ['call-911', 'find-hospital', 'back'] :
+        ['monitor-symptoms', 'schedule-appointment', 'find-clinic', 'back']
     );
   };
 
@@ -512,9 +604,27 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
         break;
 
       case 'emergency':
-        addMessage('bot', '## 🚨 Emergency Symptoms\n\n**Seek IMMEDIATE medical attention for:**\n\n' + 
-          emergencySymptoms.map(s => `• ${s}`).join('\n') + 
+        addMessage('bot', '## 🚨 Emergency Symptoms\n\n**Seek IMMEDIATE medical attention for:**\n\n' +
+          emergencySymptoms.map(s => `• ${s}`).join('\n') +
           '\n\n**Call 911 or go to nearest Emergency Room**');
+        break;
+
+      case 'head-pain':
+      case 'abdominal-pain':
+      case 'back-pain':
+        // These are now handled as symptoms
+        break;
+
+      case 'describe-pain':
+        addMessage('bot', 'Please describe your pain in detail. Include location, type (sharp/dull), severity, and duration.');
+        break;
+
+      case 'assess-fever':
+        handleSymptomSelect('fever');
+        break;
+
+      case 'monitor':
+        addMessage('bot', '**Symptom Monitoring Guide:**\n\n📋 Keep a symptom diary:\n• Record symptoms daily\n• Note severity (1-10)\n• Track triggers\n• Document medications\n\nReturn if symptoms worsen or new symptoms appear.');
         break;
     }
   };
@@ -530,18 +640,19 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
 
     // Simple keyword matching for demo (in real app, use NLP/AI)
     const lowerMessage = userMessage.toLowerCase();
-    
+
     let response = '';
-    
+
     if (lowerMessage.includes('fever') || lowerMessage.includes('temperature')) {
       response = '**Regarding fever:**\n\nFever is your body\'s response to infection. Key considerations:\n\n• Monitor temperature regularly\n• Stay hydrated\n• Rest as needed\n• Seek help if >39°C or persists >3 days\n\nWould you like to assess your fever level?';
       addMessage('bot', response, ['assess-fever', 'monitor', 'back']);
     } else if (lowerMessage.includes('pain') || lowerMessage.includes('hurt')) {
       response = '**Regarding pain:**\n\nPain assessment is important. Please specify:\n\n1. Location of pain\n2. Type (sharp, dull, throbbing)\n3. Severity (1-10)\n4. Duration\n5. What relieves/worsens it';
-      addMessage('bot', response, ['head-pain', 'chest-pain', 'abdominal-pain', 'back-pain', 'describe-pain']);
+      response = '**Regarding pain:**\n\nPain assessment is important. Please specify:\n\n1. Location of pain\n2. Type (sharp, dull, throbbing)\n3. Severity (1-10)\n4. Duration\n5. What relieves/worsens it';
+      addMessage('bot', response, ['headache', 'chest-pain', 'abdominal-pain', 'back-pain', 'describe-pain']);
     } else if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
       response = '**Emergency Response:**\n\nIf this is a medical emergency:\n\n🚨 **Call 911 immediately**\n\nFor non-emergency concerns, please describe your symptoms for proper guidance.';
-      addMessage('bot', response, ['call-911', 'not-emergency', 'find-hospital']);
+      addMessage('bot', response, ['call-911', 'find-hospital']);
     } else {
       response = 'Thank you for sharing. For accurate assessment:\n\n1. **Describe specific symptoms**\n2. **Note duration and severity**\n3. **Any existing health conditions**\n4. **Current medications**\n\nOr select from common symptoms for detailed guidance.';
       addMessage('bot', response, symptoms.map(s => s.id));
@@ -584,7 +695,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
         <div className="px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <button 
+              <button
                 onClick={() => onNavigate('dashboard')}
                 className="p-2 hover:bg-muted rounded-lg transition-colors"
               >
@@ -598,7 +709,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                 </div>
               </div>
             </div>
-            
+
             <button
               onClick={() => onNavigate('emergency')}
               className="p-2 hover:bg-destructive/10 rounded-lg transition-colors"
@@ -626,11 +737,11 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                   </div>
                 </div>
               )}
-              
-              <div className={`rounded-xl p-4 ${message.type === 'user' 
-                ? 'bg-primary text-primary-foreground rounded-br-none shadow-sm' 
+
+              <div className={`rounded-xl p-4 ${message.type === 'user'
+                ? 'bg-primary text-primary-foreground rounded-br-none shadow-sm'
                 : 'bg-card border border-border rounded-bl-none shadow-sm'
-              }`}>
+                }`}>
                 {message.type === 'bot' && message.content.includes('##') && (
                   <div className="mb-3 pb-2 border-b border-border/50">
                     <h3 className="text-base font-bold text-foreground">
@@ -638,11 +749,11 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                     </h3>
                   </div>
                 )}
-                
+
                 <div className="prose prose-sm max-w-none">
                   {message.content.split('\n').map((line, index) => {
                     if (line.startsWith('## ')) return null;
-                    
+
                     if (line.startsWith('**') && line.endsWith('**')) {
                       return (
                         <div key={index} className="font-semibold text-foreground mb-2">
@@ -650,12 +761,12 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                         </div>
                       );
                     }
-                    
+
                     if (line.startsWith('• ') || line.startsWith('✓ ') || line.startsWith('⚠️ ') || line.startsWith('📍 ') || line.startsWith('📞 ') || line.startsWith('🏥 ')) {
                       const prefix = line.charAt(0);
-                      const color = prefix === '•' ? 'text-muted-foreground' : 
-                                   prefix === '✓' ? 'text-emerald-600' : 
-                                   prefix === '⚠️' ? 'text-destructive' : 'text-primary';
+                      const color = prefix === '•' ? 'text-muted-foreground' :
+                        prefix === '✓' ? 'text-emerald-600' :
+                          prefix === '⚠️' ? 'text-destructive' : 'text-primary';
                       return (
                         <div key={index} className={`flex items-start gap-2 mb-1 ${color}`}>
                           <span className="mt-0.5 flex-shrink-0">{prefix === '•' ? '•' : prefix === '✓' ? '✓' : prefix}</span>
@@ -663,11 +774,11 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                         </div>
                       );
                     }
-                    
+
                     if (line.trim() === '') {
                       return <div key={index} className="h-3" />;
                     }
-                    
+
                     return (
                       <p key={index} className="text-sm text-foreground/80 mb-2 last:mb-0">
                         {line}
@@ -705,7 +816,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
 
                     const category = categories.find(c => c.id === option);
                     const symptom = symptoms.find(s => s.id === option);
-                    
+
                     if (category) {
                       label = category.name;
                       color = 'bg-primary/10 hover:bg-primary/20 text-primary border-primary/20';
@@ -724,8 +835,8 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                       const severity = level === 1 ? 'Mild' : level === 2 ? 'Moderate' : 'Severe';
                       label = `${stars} - ${severity}`;
                       color = level === 1 ? 'bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border-emerald-200' :
-                              level === 2 ? 'bg-amber-100 hover:bg-amber-200 text-amber-700 border-amber-200' :
-                              'bg-red-100 hover:bg-red-200 text-red-700 border-red-200';
+                        level === 2 ? 'bg-amber-100 hover:bg-amber-200 text-amber-700 border-amber-200' :
+                          'bg-red-100 hover:bg-red-200 text-red-700 border-red-200';
                       icon = <Star className="w-3.5 h-3.5" />;
                     } else if (option === 'call-911') {
                       label = '🚨 Call Emergency Services';
@@ -755,10 +866,20 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                       label = '❓ Not Sure About Level';
                       color = 'bg-muted hover:bg-muted/80 text-muted-foreground border-border';
                       icon = <HelpCircle className="w-3.5 h-3.5" />;
-                    } else if (option === 'emergency') {
-                      label = '🚨 Emergency Symptoms';
                       color = 'bg-destructive/10 hover:bg-destructive/20 text-destructive border-destructive/20';
                       icon = <AlertTriangle className="w-3.5 h-3.5" />;
+                    } else if (option === 'describe-pain') {
+                      label = '📝 Describe Pain';
+                      color = 'bg-secondary/10 hover:bg-secondary/20 text-secondary border-secondary/20';
+                      icon = <FileText className="w-3.5 h-3.5" />;
+                    } else if (option === 'assess-fever') {
+                      label = '🌡️ Assess Fever';
+                      color = 'bg-primary/10 hover:bg-primary/20 text-primary border-primary/20';
+                      icon = <Thermometer className="w-3.5 h-3.5" />;
+                    } else if (option === 'monitor') {
+                      label = '📋 Monitor Symptoms';
+                      color = 'bg-secondary/10 hover:bg-secondary/20 text-secondary border-secondary/20';
+                      icon = <Activity className="w-3.5 h-3.5" />;
                     }
 
                     return (
@@ -821,8 +942,8 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Describe your symptoms or ask a health question..."
-                className="w-full px-4 py-3 bg-input-background border border-input-border rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground text-sm"
+                placeholder="Type your symptoms or question."
+                className="w-full pl-4 pr-12 py-3 bg-input-background border border-input-border rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 text-foreground placeholder:text-muted-foreground text-sm"
               />
               <button
                 onClick={() => handleQuickAction('describe-symptoms')}
@@ -835,16 +956,15 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
             <button
               onClick={handleSendMessage}
               disabled={!inputMessage.trim()}
-              className={`px-4 py-3 rounded-xl font-medium transition-all active:scale-95 ${
-                inputMessage.trim()
-                  ? 'bg-primary text-primary-foreground hover:bg-primary-hover shadow-sm'
-                  : 'bg-muted text-muted-foreground cursor-not-allowed'
-              }`}
+              className={`px-4 py-3 rounded-xl font-medium transition-all active:scale-95 ${inputMessage.trim()
+                ? 'bg-primary text-primary-foreground hover:bg-primary-hover shadow-sm'
+                : 'bg-muted text-muted-foreground cursor-not-allowed'
+                }`}
             >
               <Send className="w-5 h-5" />
             </button>
           </div>
-          
+
           <div className="flex items-center justify-between mt-3">
             <div className="text-xs text-muted-foreground">
               <div className="flex items-center gap-1">

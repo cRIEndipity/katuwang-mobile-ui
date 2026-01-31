@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { 
-  ChevronLeft, 
-  UserPlus, 
-  Phone, 
+import {
+  ChevronLeft,
+  UserPlus,
+  Phone,
   Mail,
   Trash2,
-  X, 
-  Check, 
+  X,
+  Check,
   Shield,
   Edit2,
   Users,
@@ -18,7 +18,7 @@ import {
   BadgeCheck
 } from 'lucide-react';
 
-type Screen = 'user-type' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts' | 'health-records';
+import { Screen } from "../types";
 type UserType = 'patient' | 'professional' | null;
 
 interface EmergencyContactsProps {
@@ -46,18 +46,7 @@ const relationshipOptions = [
   { value: 'Other', icon: '👤' }
 ];
 
-// Professional Government Color Scheme
-const BRAND_COLORS = {
-  primary: '#F7502F',    // Naga Coral - Primary actions, alerts
-  secondary: '#1D62AF',  // Fun Blue - Main theme, buttons
-  success: '#00A651',    // Green - Confirmations, status
-  background: '#FAFBFC', // Athens Gray - Background
-  surface: '#FFFFFF',    // White - Cards, surfaces
-  textPrimary: '#1E293B',// Slate 800 - Primary text
-  textSecondary: '#64748B', // Slate 500 - Secondary text
-  border: '#E2E8F0',     // Slate 200 - Borders
-  error: '#DC2626',      // Red - Errors, warnings
-};
+import { BRAND_COLORS } from '../../constants/colors';
 
 export default function EmergencyContacts({ onNavigate, userType }: EmergencyContactsProps) {
   const [contacts, setContacts] = useState<Contact[]>([
@@ -168,21 +157,21 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#FAFBFC' }}>
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: BRAND_COLORS.surface }}>
       {/* Header */}
-      <div 
+      <div
         className="px-6 pt-8 pb-6 text-white"
-        style={{ backgroundColor: '#1D62AF' }}
+        style={{ backgroundColor: BRAND_COLORS.primary }}
       >
         <div className="flex items-center justify-between mb-6">
-          <button 
+          <button
             onClick={() => onNavigate('dashboard')}
             className="flex items-center gap-2 text-white/80 hover:text-white transition-colors p-2 rounded-lg hover:bg-white/10"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-sm font-medium">Back</span>
           </button>
-          
+
           <button
             onClick={openAddModal}
             className="flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all active:scale-95"
@@ -205,7 +194,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
       </div>
 
       {/* Stats Bar */}
-      <div className="px-6 py-4" style={{ backgroundColor: '#FFFFFF' }}>
+      <div className="px-6 py-4" style={{ backgroundColor: BRAND_COLORS.background }}>
         <div className="flex items-center justify-between">
           <div>
             <div className="text-sm font-medium" style={{ color: BRAND_COLORS.textSecondary }}>
@@ -226,16 +215,16 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
 
       {/* Notification Info */}
       <div className="px-6 py-4">
-        <div 
+        <div
           className="rounded-xl p-4 border"
-          style={{ 
+          style={{
             backgroundColor: 'rgba(29, 98, 175, 0.08)',
             borderColor: BRAND_COLORS.border
           }}
         >
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(29, 98, 175, 0.2)' }}>
-              <AlertCircle className="w-5 h-5" style={{ color: BRAND_COLORS.secondary }} />
+              <AlertCircle className="w-5 h-5" style={{ color: BRAND_COLORS.primary }} />
             </div>
             <div>
               <h3 className="text-sm font-semibold mb-1" style={{ color: BRAND_COLORS.textPrimary }}>
@@ -255,21 +244,21 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
           <h2 className="text-base font-semibold" style={{ color: BRAND_COLORS.textPrimary }}>
             Emergency Contacts
           </h2>
-          <span className="text-xs font-medium px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(247, 80, 47, 0.15)', color: BRAND_COLORS.primary }}>
+          <span className="text-xs font-medium px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(56, 189, 248, 0.15)', color: BRAND_COLORS.primary }}>
             {contacts.length} saved
           </span>
         </div>
 
         {contacts.length === 0 ? (
-          <div 
+          <div
             className="rounded-xl p-8 text-center border-2 border-dashed"
-            style={{ 
-              backgroundColor: BRAND_COLORS.surface,
+            style={{
+              backgroundColor: BRAND_COLORS.background,
               borderColor: BRAND_COLORS.border
             }}
           >
             <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: 'rgba(29, 98, 175, 0.1)' }}>
-              <Users className="w-8 h-8" style={{ color: BRAND_COLORS.secondary }} />
+              <Users className="w-8 h-8" style={{ color: BRAND_COLORS.primary }} />
             </div>
             <h3 className="text-lg font-semibold mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
               No Emergency Contacts
@@ -280,7 +269,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
             <button
               onClick={openAddModal}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all active:scale-95"
-              style={{ backgroundColor: BRAND_COLORS.secondary, color: 'white' }}
+              style={{ backgroundColor: BRAND_COLORS.primary, color: 'white' }}
             >
               <UserPlus className="w-4 h-4" />
               Add First Contact
@@ -289,18 +278,18 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
         ) : (
           <div className="space-y-3">
             {contacts.map((contact) => (
-              <div 
+              <div
                 key={contact.id}
                 className="rounded-xl overflow-hidden transition-all hover:shadow-md"
-                style={{ 
-                  backgroundColor: BRAND_COLORS.surface,
+                style={{
+                  backgroundColor: BRAND_COLORS.background,
                   border: `1px solid ${BRAND_COLORS.border}`
                 }}
               >
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div 
+                      <div
                         className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-semibold"
                         style={{ backgroundColor: contact.isPrimary ? BRAND_COLORS.primary : BRAND_COLORS.secondary }}
                       >
@@ -327,12 +316,12 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                   </div>
 
                   <div className="space-y-2 mb-4">
-                    <a 
+                    <a
                       href={`tel:${contact.phone}`}
                       className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group"
                     >
                       <div className="w-8 h-8 rounded-md flex items-center justify-center" style={{ backgroundColor: 'rgba(29, 98, 175, 0.1)' }}>
-                        <Phone className="w-4 h-4" style={{ color: BRAND_COLORS.secondary }} />
+                        <Phone className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                       </div>
                       <div className="flex-1">
                         <div className="text-xs font-medium" style={{ color: BRAND_COLORS.textSecondary }}>
@@ -342,16 +331,16 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                           {contact.phone}
                         </div>
                       </div>
-                      <PhoneCall className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: BRAND_COLORS.secondary }} />
+                      <PhoneCall className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: BRAND_COLORS.primary }} />
                     </a>
 
                     {contact.email && (
-                      <a 
+                      <a
                         href={`mailto:${contact.email}`}
                         className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors group"
                       >
                         <div className="w-8 h-8 rounded-md flex items-center justify-center" style={{ backgroundColor: 'rgba(29, 98, 175, 0.1)' }}>
-                          <Mail className="w-4 h-4" style={{ color: BRAND_COLORS.secondary }} />
+                          <Mail className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                         </div>
                         <div className="flex-1">
                           <div className="text-xs font-medium" style={{ color: BRAND_COLORS.textSecondary }}>
@@ -370,9 +359,9 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                       <button
                         onClick={() => handleSetPrimary(contact.id)}
                         className="flex-1 text-center py-2.5 rounded-lg text-sm font-medium transition-all active:scale-95"
-                        style={{ 
+                        style={{
                           backgroundColor: 'rgba(29, 98, 175, 0.1)',
-                          color: BRAND_COLORS.secondary
+                          color: BRAND_COLORS.primary
                         }}
                       >
                         Set as Primary
@@ -381,7 +370,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                     <button
                       onClick={() => openEditModal(contact)}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium transition-all active:scale-95"
-                      style={{ 
+                      style={{
                         backgroundColor: 'rgba(29, 98, 175, 0.1)',
                         color: BRAND_COLORS.secondary
                       }}
@@ -392,9 +381,9 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                     <button
                       onClick={() => openDeleteModal(contact)}
                       className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-sm font-medium transition-all active:scale-95"
-                      style={{ 
-                        backgroundColor: 'rgba(247, 80, 47, 0.1)',
-                        color: BRAND_COLORS.primary
+                      style={{
+                        backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                        color: BRAND_COLORS.danger
                       }}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -412,8 +401,8 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
             <button
               onClick={openAddModal}
               className="w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-medium transition-all active:scale-95"
-              style={{ 
-                backgroundColor: BRAND_COLORS.secondary,
+              style={{
+                backgroundColor: BRAND_COLORS.primary,
                 color: 'white'
               }}
             >
@@ -429,9 +418,9 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
             {/* Modal Header */}
-            <div 
+            <div
               className="px-6 py-5 text-white"
-              style={{ backgroundColor: BRAND_COLORS.secondary }}
+              style={{ backgroundColor: BRAND_COLORS.primary }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -465,13 +454,12 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                   type="text"
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                    formErrors.name 
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-100' 
-                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${formErrors.name
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
+                    : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
+                    }`}
                   placeholder="Enter full name"
-                  style={{ backgroundColor: BRAND_COLORS.background }}
+                  style={{ backgroundColor: BRAND_COLORS.surface }}
                 />
                 {formErrors.name && (
                   <p className="text-red-600 text-xs mt-1">{formErrors.name}</p>
@@ -488,14 +476,13 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                       key={option.value}
                       type="button"
                       onClick={() => setFormRelationship(option.value)}
-                      className={`py-2.5 rounded-lg border text-sm font-medium transition-all ${
-                        formRelationship === option.value
-                          ? 'border-blue-500 text-blue-600'
-                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                      }`}
+                      className={`py-2.5 rounded-lg border text-sm font-medium transition-all ${formRelationship === option.value
+                        ? 'border-blue-500 text-blue-600'
+                        : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                        }`}
                       style={{
-                        backgroundColor: formRelationship === option.value 
-                          ? `${BRAND_COLORS.secondary}10` 
+                        backgroundColor: formRelationship === option.value
+                          ? `${BRAND_COLORS.primary}10`
                           : 'white'
                       }}
                     >
@@ -517,13 +504,12 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                   type="tel"
                   value={formPhone}
                   onChange={(e) => setFormPhone(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                    formErrors.phone 
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-100' 
-                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${formErrors.phone
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
+                    : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
+                    }`}
                   placeholder="09171234567"
-                  style={{ backgroundColor: BRAND_COLORS.background }}
+                  style={{ backgroundColor: BRAND_COLORS.surface }}
                 />
                 {formErrors.phone && (
                   <p className="text-red-600 text-xs mt-1">{formErrors.phone}</p>
@@ -540,7 +526,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                   onChange={(e) => setFormEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:ring-offset-1"
                   placeholder="email@example.com"
-                  style={{ backgroundColor: BRAND_COLORS.background }}
+                  style={{ backgroundColor: BRAND_COLORS.surface }}
                 />
               </div>
 
@@ -548,7 +534,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                 <button
                   onClick={handleAddSubmit}
                   className="w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-medium text-white transition-all active:scale-95"
-                  style={{ backgroundColor: BRAND_COLORS.secondary }}
+                  style={{ backgroundColor: BRAND_COLORS.primary }}
                 >
                   <Check className="w-5 h-5" />
                   Add Emergency Contact
@@ -564,9 +550,9 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
             {/* Modal Header */}
-            <div 
+            <div
               className="px-6 py-5 text-white"
-              style={{ backgroundColor: BRAND_COLORS.secondary }}
+              style={{ backgroundColor: BRAND_COLORS.primary }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -601,13 +587,12 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                   type="text"
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                    formErrors.name 
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-100' 
-                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${formErrors.name
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
+                    : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
+                    }`}
                   placeholder="Enter full name"
-                  style={{ backgroundColor: BRAND_COLORS.background }}
+                  style={{ backgroundColor: BRAND_COLORS.surface }}
                 />
                 {formErrors.name && (
                   <p className="text-red-600 text-xs mt-1">{formErrors.name}</p>
@@ -624,14 +609,13 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                       key={option.value}
                       type="button"
                       onClick={() => setFormRelationship(option.value)}
-                      className={`py-2.5 rounded-lg border text-sm font-medium transition-all ${
-                        formRelationship === option.value
-                          ? 'border-blue-500 text-blue-600'
-                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
-                      }`}
+                      className={`py-2.5 rounded-lg border text-sm font-medium transition-all ${formRelationship === option.value
+                        ? 'border-blue-500 text-blue-600'
+                        : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                        }`}
                       style={{
-                        backgroundColor: formRelationship === option.value 
-                          ? `${BRAND_COLORS.secondary}10` 
+                        backgroundColor: formRelationship === option.value
+                          ? `${BRAND_COLORS.primary}10`
                           : 'white'
                       }}
                     >
@@ -653,13 +637,12 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                   type="tel"
                   value={formPhone}
                   onChange={(e) => setFormPhone(e.target.value)}
-                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                    formErrors.phone 
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-100' 
-                      : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
-                  }`}
+                  className={`w-full px-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-offset-1 ${formErrors.phone
+                    ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
+                    : 'border-gray-300 focus:border-blue-500 focus:ring-blue-100'
+                    }`}
                   placeholder="09171234567"
-                  style={{ backgroundColor: BRAND_COLORS.background }}
+                  style={{ backgroundColor: BRAND_COLORS.surface }}
                 />
                 {formErrors.phone && (
                   <p className="text-red-600 text-xs mt-1">{formErrors.phone}</p>
@@ -676,7 +659,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                   onChange={(e) => setFormEmail(e.target.value)}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:ring-offset-1"
                   placeholder="email@example.com"
-                  style={{ backgroundColor: BRAND_COLORS.background }}
+                  style={{ backgroundColor: BRAND_COLORS.surface }}
                 />
               </div>
 
@@ -684,7 +667,7 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
                 <button
                   onClick={handleEditSubmit}
                   className="w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-medium text-white transition-all active:scale-95"
-                  style={{ backgroundColor: BRAND_COLORS.secondary }}
+                  style={{ backgroundColor: BRAND_COLORS.primary }}
                 >
                   <Check className="w-5 h-5" />
                   Save Changes
@@ -699,17 +682,17 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
       {showDeleteModal && selectedContact && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-sm w-full p-6">
-            <div 
+            <div
               className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4"
-              style={{ backgroundColor: 'rgba(247, 80, 47, 0.1)' }}
+              style={{ backgroundColor: 'rgba(211, 47, 47, 0.1)' }}
             >
-              <Trash2 className="w-6 h-6" style={{ color: BRAND_COLORS.primary }} />
+              <Trash2 className="w-6 h-6" style={{ color: BRAND_COLORS.danger }} />
             </div>
-            
+
             <h2 className="text-lg font-bold text-center mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
               Remove Contact?
             </h2>
-            
+
             <p className="text-sm text-center mb-1" style={{ color: BRAND_COLORS.textSecondary }}>
               Are you sure you want to remove
             </p>
@@ -721,19 +704,19 @@ export default function EmergencyContacts({ onNavigate, userType }: EmergencyCon
               <button
                 onClick={handleDeleteSubmit}
                 className="w-full flex items-center justify-center gap-2 py-3 rounded-lg font-medium text-white transition-all active:scale-95"
-                style={{ backgroundColor: BRAND_COLORS.primary }}
+                style={{ backgroundColor: BRAND_COLORS.danger }}
               >
                 <Trash2 className="w-4 h-4" />
                 Yes, Remove Contact
               </button>
-              
+
               <button
                 onClick={() => {
                   setShowDeleteModal(false);
                   setSelectedContact(null);
                 }}
                 className="w-full py-3 rounded-lg border font-medium transition-all active:scale-95"
-                style={{ 
+                style={{
                   borderColor: BRAND_COLORS.border,
                   color: BRAND_COLORS.textPrimary
                 }}

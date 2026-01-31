@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { 
-  Wifi, 
-  Battery, 
-  Bell, 
-  User, 
+import {
+  Wifi,
+  Battery,
+  Bell,
+  User,
   Search,
   Home,
   FileText,
@@ -27,7 +27,6 @@ type NavigationTab = 'home' | 'services' | 'support' | 'news' | 'settings';
 
 interface UserTypeSelectionProps {
   onSelect: () => void;
-  onBack: () => void;
 }
 
 const BRAND_COLORS = {
@@ -40,7 +39,7 @@ const BRAND_COLORS = {
   slate300: '#CBD5E1',
 };
 
-export default function UserTypeSelection({ onSelect, onBack }: UserTypeSelectionProps) {
+export default function UserTypeSelection({ onSelect }: UserTypeSelectionProps) {
   const [activeNav, setActiveNav] = useState<NavigationTab>('home');
 
   const handleHealthClick = () => {
@@ -158,9 +157,9 @@ export default function UserTypeSelection({ onSelect, onBack }: UserTypeSelectio
           marginBottom: '20px'
         }}>
           <Search size={20} color={BRAND_COLORS.slate600} />
-          <input 
-            type="text" 
-            placeholder="Search services, documents..." 
+          <input
+            type="text"
+            placeholder="Search services, documents..."
             style={{
               border: 'none',
               outline: 'none',
@@ -180,7 +179,7 @@ export default function UserTypeSelection({ onSelect, onBack }: UserTypeSelectio
             marginBottom: '16px'
           }}>
             <h3 style={{ margin: '0', fontSize: '16px', fontWeight: '600', color: BRAND_COLORS.slate700 }}>Quick Actions</h3>
-            <button 
+            <button
               onClick={handleHealthClick}
               style={{
                 background: 'none',
@@ -315,7 +314,7 @@ export default function UserTypeSelection({ onSelect, onBack }: UserTypeSelectio
             </button>
 
             {/* Health Services */}
-            <button 
+            <button
               onClick={handleHealthClick}
               style={{
                 background: 'white',

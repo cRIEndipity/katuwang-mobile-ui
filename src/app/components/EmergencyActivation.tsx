@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { 
-  ChevronLeft, 
-  AlertTriangle, 
-  Phone, 
-  MapPin, 
-  Users, 
-  Check, 
-  Clock, 
-  Shield, 
-  Ambulance, 
+import {
+  ChevronLeft,
+  AlertTriangle,
+  Phone,
+  MapPin,
+  Users,
+  Check,
+  Clock,
+  Shield,
+  Ambulance,
   Heart,
   Radio,
   Satellite,
@@ -20,19 +20,14 @@ import {
   ArrowLeft
 } from 'lucide-react';
 
-type Screen = 'entry' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts';
+import { Screen } from "../types";
 
 interface EmergencyActivationProps {
   onNavigate: (screen: Screen) => void;
 }
 
 // Brand Colors
-const BRAND_COLORS = {
-  primary: '#F7502F',    // Naga Coral
-  secondary: '#1D62AF',  // Fun Blue
-  accent: '#FAFBFC',     // Athens Gray
-  success: '#00A651',    // Green
-};
+import { BRAND_COLORS } from '../../constants/colors';
 
 export default function EmergencyActivation({ onNavigate }: EmergencyActivationProps) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -42,7 +37,7 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
   const [emergencyType, setEmergencyType] = useState<'medical' | 'accident' | 'other' | null>(null);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (emergencyActivated && countdown > 0) {
       interval = setInterval(() => {
         setCountdown(prev => prev - 1);
@@ -57,30 +52,30 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
   };
 
   const emergencyTypes = [
-    { id: 'medical', label: 'Medical Emergency', icon: <Heart className="w-5 h-5" />, color: BRAND_COLORS.primary },
-    { id: 'accident', label: 'Accident/Trauma', icon: <Ambulance className="w-5 h-5" />, color: BRAND_COLORS.secondary },
+    { id: 'medical', label: 'Medical Emergency', icon: <Heart className="w-5 h-5" />, color: BRAND_COLORS.danger },
+    { id: 'accident', label: 'Accident/Trauma', icon: <Ambulance className="w-5 h-5" />, color: BRAND_COLORS.primary },
     { id: 'other', label: 'Other Emergency', icon: <AlertTriangle className="w-5 h-5" />, color: '#9333EA' },
   ];
 
   if (emergencyActivated) {
     return (
-      <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.accent }}>
+      <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.dangerLight }}>
         {/* Status Bar */}
         <div className="status-bar">
           <div className="time">9:41</div>
           <div className="status-icons">
-            <Wifi size={16} style={{ color: BRAND_COLORS.primary }} />
-            <Battery size={16} style={{ color: BRAND_COLORS.primary }} />
+            <Wifi size={16} style={{ color: BRAND_COLORS.danger }} />
+            <Battery size={16} style={{ color: BRAND_COLORS.danger }} />
           </div>
         </div>
 
         {/* Header Section */}
-        <div 
+        <div
           className="text-white pt-6 px-6 pb-6"
-          style={{ backgroundColor: BRAND_COLORS.primary }}
+          style={{ backgroundColor: BRAND_COLORS.danger }}
         >
           {/* Back Button */}
-          <button 
+          <button
             onClick={() => {
               setEmergencyActivated(false);
               setCountdown(5);
@@ -102,15 +97,15 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
         {/* Content Section */}
         <div className="px-6 py-8 pb-24">
           {/* Response Progress */}
-          <div className="bg-white rounded-2xl shadow-md p-6 mb-6 border-2" style={{ borderColor: BRAND_COLORS.primary }}>
+          <div className="bg-white rounded-2xl shadow-md p-6 mb-6 border-2" style={{ borderColor: BRAND_COLORS.danger }}>
             <div className="text-center mb-4">
               <div className="inline-flex items-center justify-center w-20 h-20 relative mb-3">
                 <svg className="w-full h-full" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="45" fill="none" stroke={`${BRAND_COLORS.primary}20`} strokeWidth="8" />
-                  <circle 
-                    cx="50" cy="50" r="45" 
-                    fill="none" 
-                    stroke={BRAND_COLORS.primary} 
+                  <circle cx="50" cy="50" r="45" fill="none" stroke={`${BRAND_COLORS.danger}20`} strokeWidth="8" />
+                  <circle
+                    cx="50" cy="50" r="45"
+                    fill="none"
+                    stroke={BRAND_COLORS.danger}
                     strokeWidth="8"
                     strokeLinecap="round"
                     strokeDasharray="283"
@@ -120,7 +115,7 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-2xl font-bold" style={{ color: BRAND_COLORS.primary }}>{countdown}</span>
+                  <span className="text-2xl font-bold" style={{ color: BRAND_COLORS.danger }}>{countdown}</span>
                 </div>
               </div>
               <p className="text-sm text-gray-600">Connecting to emergency services...</p>
@@ -129,10 +124,10 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
 
           {/* Response Grid */}
           <div className="grid grid-cols-2 gap-3 mb-6">
-            <div className="bg-white rounded-xl shadow-sm p-4 border" style={{ borderColor: `${BRAND_COLORS.primary}30` }}>
+            <div className="bg-white rounded-xl shadow-sm p-4 border" style={{ borderColor: `${BRAND_COLORS.danger}30` }}>
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.primary}20` }}>
-                  <Radio className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.danger}20` }}>
+                  <Radio className="w-4 h-4" style={{ color: BRAND_COLORS.danger }} />
                 </div>
                 <span className="text-xs font-semibold text-gray-800">911 Dispatch</span>
               </div>
@@ -142,10 +137,10 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-4 border" style={{ borderColor: `${BRAND_COLORS.secondary}30` }}>
+            <div className="bg-white rounded-xl shadow-sm p-4 border" style={{ borderColor: `${BRAND_COLORS.primary}30` }}>
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.primary}20` }}>
-                  <Satellite className="w-4 h-4" style={{ color: BRAND_COLORS.secondary }} />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.danger}20` }}>
+                  <Satellite className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                 </div>
                 <span className="text-xs font-semibold text-gray-800">Location</span>
               </div>
@@ -165,10 +160,10 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
               <div className="text-xs text-gray-600">3 notified</div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-4 border" style={{ borderColor: `${BRAND_COLORS.primary}30` }}>
+            <div className="bg-white rounded-xl shadow-sm p-4 border" style={{ borderColor: `${BRAND_COLORS.danger}30` }}>
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.primary}20` }}>
-                  <Clock className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: `${BRAND_COLORS.danger}20` }}>
+                  <Clock className="w-4 h-4" style={{ color: BRAND_COLORS.danger }} />
                 </div>
                 <span className="text-xs font-semibold text-gray-800">ETA</span>
               </div>
@@ -177,20 +172,20 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
           </div>
 
           {/* Safety Instructions */}
-          <div className="bg-white rounded-2xl shadow-sm p-5 mb-6 border-2" style={{ borderColor: BRAND_COLORS.secondary }}>
+          <div className="bg-white rounded-2xl shadow-sm p-5 mb-6 border-2" style={{ borderColor: BRAND_COLORS.primary }}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-                <Shield className="w-4 h-4" style={{ color: BRAND_COLORS.secondary }} />
+                <Shield className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
                 Safety Instructions
               </h3>
               <button
                 onClick={() => setShowSafetyInstructions(!showSafetyInstructions)}
-                className="text-xs" style={{ color: BRAND_COLORS.primary }}
+                className="text-xs" style={{ color: BRAND_COLORS.danger }}
               >
                 {showSafetyInstructions ? 'Hide' : 'Show'}
               </button>
             </div>
-            
+
             {showSafetyInstructions && (
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
@@ -226,12 +221,12 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
             <a
               href="tel:911"
               className="flex items-center justify-center gap-2 rounded-xl px-6 py-4 font-semibold transition-all active:scale-[0.98] shadow-sm"
-              style={{ backgroundColor: BRAND_COLORS.primary, color: 'white' }}
+              style={{ backgroundColor: BRAND_COLORS.danger, color: 'white' }}
             >
               <Phone className="w-5 h-5" />
               Call 911 Directly
             </a>
-            
+
             <button
               onClick={() => {
                 setEmergencyActivated(false);
@@ -245,7 +240,7 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
             <button
               onClick={() => onNavigate('dashboard')}
               className="w-full text-gray-600 rounded-xl px-6 py-4 font-semibold hover:bg-gray-50 transition-all active:scale-[0.98]"
-              style={{ color: BRAND_COLORS.secondary }}
+              style={{ color: BRAND_COLORS.primary }}
             >
               Back to Dashboard
             </button>
@@ -256,23 +251,23 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.accent }}>
+    <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.surface }}>
       {/* Status Bar */}
       <div className="status-bar">
         <div className="time">9:41</div>
         <div className="status-icons">
-          <Wifi size={16} style={{ color: BRAND_COLORS.secondary }} />
-          <Battery size={16} style={{ color: BRAND_COLORS.secondary }} />
+          <Wifi size={16} style={{ color: BRAND_COLORS.primary }} />
+          <Battery size={16} style={{ color: BRAND_COLORS.primary }} />
         </div>
       </div>
 
       {/* Header Section */}
-      <div 
+      <div
         className="text-white pt-6 px-6 pb-8"
-        style={{ backgroundColor: BRAND_COLORS.secondary }}
+        style={{ backgroundColor: BRAND_COLORS.primary }}
       >
         {/* Back Button */}
-        <button 
+        <button
           onClick={() => onNavigate('dashboard')}
           className="flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6"
         >
@@ -291,15 +286,15 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
       {/* Content Section */}
       <div className="px-6 py-8 pb-32">
         {/* Warning Alert */}
-        <div 
+        <div
           className="rounded-2xl p-5 border-2 mb-6"
-          style={{ 
-            backgroundColor: `${BRAND_COLORS.primary}10`,
-            borderColor: BRAND_COLORS.primary
+          style={{
+            backgroundColor: `${BRAND_COLORS.danger}10`,
+            borderColor: BRAND_COLORS.danger
           }}
         >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: BRAND_COLORS.primary }} />
+            <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: BRAND_COLORS.danger }} />
             <div>
               <h4 className="text-sm font-semibold text-gray-900">For Life-Threatening Emergencies Only</h4>
               <p className="text-xs text-gray-600 mt-1">Use this feature only when immediate professional assistance is required.</p>
@@ -315,16 +310,15 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
               <button
                 key={type.id}
                 onClick={() => setEmergencyType(type.id as any)}
-                className={`w-full bg-white rounded-xl shadow-sm border-2 overflow-hidden hover:shadow-md transition-all active:scale-[0.98] text-left group ${
-                  emergencyType === type.id ? 'border-2' : 'border-transparent'
-                }`}
-                style={{ 
+                className={`w-full bg-white rounded-xl shadow-sm border-2 overflow-hidden hover:shadow-md transition-all active:scale-[0.98] text-left group ${emergencyType === type.id ? 'border-2' : 'border-transparent'
+                  }`}
+                style={{
                   borderColor: emergencyType === type.id ? type.color : 'transparent',
                   backgroundColor: emergencyType === type.id ? `${type.color}10` : 'white'
                 }}
               >
                 <div className="p-4 flex items-center gap-4">
-                  <div 
+                  <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: emergencyType === type.id ? type.color : `${type.color}20` }}
                   >
@@ -348,29 +342,29 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
         </div>
 
         {/* What Happens */}
-        <div className="bg-white rounded-2xl shadow-sm p-5 mb-8 border-2" style={{ borderColor: BRAND_COLORS.secondary }}>
+        <div className="bg-white rounded-2xl shadow-sm p-5 mb-8 border-2" style={{ borderColor: BRAND_COLORS.primary }}>
           <h3 className="text-sm font-semibold text-gray-900 mb-4">What Happens When Activated</h3>
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${BRAND_COLORS.primary}20` }}>
-                <Radio className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${BRAND_COLORS.danger}20` }}>
+                <Radio className="w-4 h-4" style={{ color: BRAND_COLORS.danger }} />
               </div>
               <div>
                 <h4 className="text-xs font-semibold text-gray-900">911 Dispatch Alerted</h4>
                 <p className="text-xs text-gray-500">Nearest emergency unit dispatched immediately</p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${BRAND_COLORS.secondary}20` }}>
-                <Users className="w-4 h-4" style={{ color: BRAND_COLORS.secondary }} />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${BRAND_COLORS.primary}20` }}>
+                <Users className="w-4 h-4" style={{ color: BRAND_COLORS.primary }} />
               </div>
               <div>
                 <h4 className="text-xs font-semibold text-gray-900">Contacts Notified</h4>
                 <p className="text-xs text-gray-500">Emergency contacts receive SMS and call alerts</p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${BRAND_COLORS.success}20` }}>
                 <MapPin className="w-4 h-4" style={{ color: BRAND_COLORS.success }} />
@@ -390,13 +384,13 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
             <a
               href="tel:911"
               className="flex items-center justify-between p-4 rounded-xl shadow-sm border-2 hover:shadow-md transition-all active:scale-[0.98] group"
-              style={{ 
-                backgroundColor: `${BRAND_COLORS.primary}10`,
-                borderColor: BRAND_COLORS.primary
+              style={{
+                backgroundColor: `${BRAND_COLORS.danger}10`,
+                borderColor: BRAND_COLORS.danger
               }}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: BRAND_COLORS.primary }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: BRAND_COLORS.danger }}>
                   <Phone className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
@@ -406,17 +400,17 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
               </div>
               <div className="text-lg font-bold text-gray-900">911</div>
             </a>
-            
+
             <a
               href="tel:1555"
               className="flex items-center justify-between p-4 rounded-xl shadow-sm border-2 hover:shadow-md transition-all active:scale-[0.98] group"
-              style={{ 
-                backgroundColor: `${BRAND_COLORS.secondary}10`,
-                borderColor: BRAND_COLORS.secondary
+              style={{
+                backgroundColor: `${BRAND_COLORS.primary}10`,
+                borderColor: BRAND_COLORS.primary
               }}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: BRAND_COLORS.secondary }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: BRAND_COLORS.primary }}>
                   <Phone className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
@@ -426,11 +420,11 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
               </div>
               <div className="text-lg font-bold text-gray-900">1555</div>
             </a>
-            
+
             <a
               href="tel:143"
               className="flex items-center justify-between p-4 rounded-xl shadow-sm border-2 hover:shadow-md transition-all active:scale-[0.98] group"
-              style={{ 
+              style={{
                 backgroundColor: `${BRAND_COLORS.success}10`,
                 borderColor: BRAND_COLORS.success
               }}
@@ -450,15 +444,15 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
         </div>
 
         {/* Quick Info */}
-        <div 
+        <div
           className="rounded-2xl p-5 border-2"
-          style={{ 
-            backgroundColor: `${BRAND_COLORS.secondary}10`,
-            borderColor: BRAND_COLORS.secondary
+          style={{
+            backgroundColor: `${BRAND_COLORS.primary}10`,
+            borderColor: BRAND_COLORS.primary
           }}
         >
           <div className="flex items-start gap-3">
-            <Shield className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: BRAND_COLORS.secondary }} />
+            <Shield className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: BRAND_COLORS.primary }} />
             <div>
               <h4 className="text-sm font-semibold text-gray-900">Your Safety is Our Priority</h4>
               <p className="text-xs text-gray-600 mt-1">Naga City Emergency Services • 24/7 Response • Team NAGANA</p>
@@ -468,12 +462,12 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
       </div>
 
       {/* Activation Button - Fixed Bottom */}
-      <div className="fixed bottom-0 left-0 right-0 p-6" style={{ backgroundColor: BRAND_COLORS.accent }}>
+      <div className="fixed bottom-0 left-0 right-0 p-6" style={{ backgroundColor: BRAND_COLORS.surface }}>
         <div className="max-w-md mx-auto">
           <button
             onClick={() => setShowConfirmModal(true)}
             className="w-full rounded-xl shadow-xl py-5 font-bold flex items-center justify-center gap-2 text-lg transition-all active:scale-[0.98] hover:shadow-2xl"
-            style={{ backgroundColor: BRAND_COLORS.secondary, color: 'white' }}
+            style={{ backgroundColor: BRAND_COLORS.danger, color: 'white' }}
           >
             <AlertTriangle className="w-6 h-6" />
             ACTIVATE EMERGENCY ALERT
@@ -489,11 +483,11 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-6 z-50">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
             <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: `${BRAND_COLORS.primary}20` }}>
-                <AlertTriangle className="w-10 h-10" style={{ color: BRAND_COLORS.primary }} />
+              <div className="w-20 h-20 rounded-full flex items-center justify-center animate-pulse" style={{ backgroundColor: `${BRAND_COLORS.danger}20` }}>
+                <AlertTriangle className="w-10 h-10" style={{ color: BRAND_COLORS.danger }} />
               </div>
             </div>
-            
+
             <h2 className="text-2xl font-bold text-center mb-3 text-gray-900">Confirm Emergency Alert</h2>
             <p className="text-center text-sm mb-8 text-gray-600">
               This will immediately notify emergency services (911), your emergency contacts, and share your location.
@@ -501,8 +495,8 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
 
             {/* Notification Summary */}
             <div className="space-y-2 mb-6">
-              <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: `${BRAND_COLORS.primary}10` }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white flex-shrink-0" style={{ backgroundColor: BRAND_COLORS.primary }}>
+              <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: `${BRAND_COLORS.danger}10` }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white flex-shrink-0" style={{ backgroundColor: BRAND_COLORS.danger }}>
                   <Radio className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
@@ -511,8 +505,8 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: `${BRAND_COLORS.secondary}10` }}>
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white flex-shrink-0" style={{ backgroundColor: BRAND_COLORS.secondary }}>
+              <div className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: `${BRAND_COLORS.primary}10` }}>
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white flex-shrink-0" style={{ backgroundColor: BRAND_COLORS.primary }}>
                   <Users className="w-5 h-5" />
                 </div>
                 <div className="flex-1">
@@ -536,11 +530,11 @@ export default function EmergencyActivation({ onNavigate }: EmergencyActivationP
               <button
                 onClick={handleActivateEmergency}
                 className="w-full rounded-xl px-6 py-4 font-semibold transition-all active:scale-[0.98] shadow-sm"
-                style={{ backgroundColor: BRAND_COLORS.primary, color: 'white' }}
+                style={{ backgroundColor: BRAND_COLORS.danger, color: 'white' }}
               >
                 YES - This is an Emergency
               </button>
-              
+
               <button
                 onClick={() => setShowConfirmModal(false)}
                 className="w-full rounded-xl px-6 py-4 font-semibold border-2 transition-all active:scale-[0.98]"

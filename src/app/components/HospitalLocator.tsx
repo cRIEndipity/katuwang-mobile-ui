@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, Map, List, Phone, Navigation, MapPin, Star, Filter, Search, Building2, Stethoscope, Heart, X, Navigation2, Loader } from 'lucide-react';
 
-type Screen = 'entry' | 'dashboard' | 'health-assistant' | 'emergency' | 'hospitals' | 'contacts';
+import { Screen } from "../types";
 
 interface HospitalLocatorProps {
   onNavigate: (screen: Screen) => void;
@@ -9,15 +9,7 @@ interface HospitalLocatorProps {
 
 type FacilityType = 'all' | 'hospital' | 'clinic' | 'health-center';
 
-const BRAND_COLORS = {
-  primary: '#1D62AF',    // Naga Coral
-  secondary: '#F7502F',  // Fun Blue
-  success: '#00A651',    // Green
-  accent: '#FAFBFC',     // Athens Gray
-  slate700: '#334155',
-  slate600: '#475569',
-  slate300: '#CBD5E1',
-};
+import { BRAND_COLORS } from '../../constants/colors';
 
 interface Facility {
   id: string;
@@ -241,7 +233,7 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
   const filteredFacilities = facilities.filter(facility => {
     const matchesType = filterType === 'all' || facility.type === filterType;
     const matchesSearch = facility.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          facility.address.toLowerCase().includes(searchQuery.toLowerCase());
+      facility.address.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesType && matchesSearch;
   });
 
@@ -255,7 +247,7 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
   };
 
   const getTypeIcon = (type: string) => {
-    switch(type) {
+    switch (type) {
       case 'hospital':
         return <Building2 className="w-4 h-4" />;
       case 'clinic':
@@ -268,20 +260,20 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.accent }}>
+    <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.surface }}>
       {/* Professional Header */}
-      <div 
+      <div
         className="text-white p-6 shadow-md"
         style={{ backgroundColor: BRAND_COLORS.primary }}
       >
-        <button 
+        <button
           onClick={() => onNavigate('dashboard')}
           className="mb-4 flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <ChevronLeft className="w-5 h-5" />
           <span className="font-medium">Back to Dashboard</span>
         </button>
-        
+
         <div className="flex items-center gap-3">
           <div className="p-3 rounded-lg" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
             <MapPin className="w-6 h-6" />
@@ -296,22 +288,20 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
         <div className="mt-4 flex gap-2">
           <button
             onClick={() => setViewMode('list')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-              viewMode === 'list' 
-                ? 'bg-white text-blue-600' 
-                : 'bg-white/20 text-white hover:bg-white/30'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${viewMode === 'list'
+              ? 'bg-white text-blue-600'
+              : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
           >
             <List className="w-4 h-4" />
             <span className="text-sm">List</span>
           </button>
           <button
             onClick={() => setViewMode('map')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${
-              viewMode === 'map' 
-                ? 'bg-white text-blue-600' 
-                : 'bg-white/20 text-white hover:bg-white/30'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all ${viewMode === 'map'
+              ? 'bg-white text-blue-600'
+              : 'bg-white/20 text-white hover:bg-white/30'
+              }`}
           >
             <Map className="w-4 h-4" />
             <span className="text-sm">Map</span>
@@ -321,18 +311,18 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
 
       <div className="p-6 space-y-6">
         {/* Search Bar */}
-        <div 
+        <div
           className="bg-white rounded-xl shadow-sm p-3 flex items-center gap-3 border"
-          style={{ borderColor: BRAND_COLORS.slate300 }}
+          style={{ borderColor: BRAND_COLORS.border }}
         >
-          <Search className="w-5 h-5" style={{ color: BRAND_COLORS.slate600 }} />
+          <Search className="w-5 h-5" style={{ color: BRAND_COLORS.textSecondary }} />
           <input
             type="text"
             placeholder="Search by name or address..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1 py-2 outline-none text-sm"
-            style={{ color: BRAND_COLORS.slate700 }}
+            style={{ color: BRAND_COLORS.textPrimary }}
           />
         </div>
 
@@ -340,30 +330,28 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
         <div className="flex gap-2 overflow-x-auto pb-2">
           <button
             onClick={() => setFilterType('all')}
-            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border ${
-              filterType === 'all'
-                ? 'text-white border-transparent'
-                : `text-${BRAND_COLORS.slate700} border-${BRAND_COLORS.slate300} bg-white`
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border ${filterType === 'all'
+              ? 'text-white border-transparent'
+              : `text-${BRAND_COLORS.textPrimary} border-${BRAND_COLORS.border} bg-white`
+              }`}
             style={{
               backgroundColor: filterType === 'all' ? BRAND_COLORS.secondary : 'white',
-              color: filterType === 'all' ? 'white' : BRAND_COLORS.slate700,
-              borderColor: filterType === 'all' ? 'transparent' : BRAND_COLORS.slate300
+              color: filterType === 'all' ? 'white' : BRAND_COLORS.textPrimary,
+              borderColor: filterType === 'all' ? 'transparent' : BRAND_COLORS.border
             }}
           >
             All Facilities
           </button>
           <button
             onClick={() => setFilterType('hospital')}
-            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border flex items-center gap-2 ${
-              filterType === 'hospital'
-                ? 'text-white border-transparent'
-                : `text-${BRAND_COLORS.slate700} border-${BRAND_COLORS.slate300} bg-white`
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border flex items-center gap-2 ${filterType === 'hospital'
+              ? 'text-white border-transparent'
+              : `text-${BRAND_COLORS.textPrimary} border-${BRAND_COLORS.border} bg-white`
+              }`}
             style={{
               backgroundColor: filterType === 'hospital' ? BRAND_COLORS.primary : 'white',
-              color: filterType === 'hospital' ? 'white' : BRAND_COLORS.slate700,
-              borderColor: filterType === 'hospital' ? 'transparent' : BRAND_COLORS.slate300
+              color: filterType === 'hospital' ? 'white' : BRAND_COLORS.textPrimary,
+              borderColor: filterType === 'hospital' ? 'transparent' : BRAND_COLORS.border
             }}
           >
             <Building2 className="w-4 h-4" />
@@ -371,15 +359,14 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
           </button>
           <button
             onClick={() => setFilterType('clinic')}
-            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border flex items-center gap-2 ${
-              filterType === 'clinic'
-                ? 'text-white border-transparent'
-                : `text-${BRAND_COLORS.slate700} border-${BRAND_COLORS.slate300} bg-white`
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border flex items-center gap-2 ${filterType === 'clinic'
+              ? 'text-white border-transparent'
+              : `text-${BRAND_COLORS.textPrimary} border-${BRAND_COLORS.border} bg-white`
+              }`}
             style={{
               backgroundColor: filterType === 'clinic' ? BRAND_COLORS.secondary : 'white',
-              color: filterType === 'clinic' ? 'white' : BRAND_COLORS.slate700,
-              borderColor: filterType === 'clinic' ? 'transparent' : BRAND_COLORS.slate300
+              color: filterType === 'clinic' ? 'white' : BRAND_COLORS.textPrimary,
+              borderColor: filterType === 'clinic' ? 'transparent' : BRAND_COLORS.border
             }}
           >
             <Stethoscope className="w-4 h-4" />
@@ -387,15 +374,14 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
           </button>
           <button
             onClick={() => setFilterType('health-center')}
-            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border flex items-center gap-2 ${
-              filterType === 'health-center'
-                ? 'text-white border-transparent'
-                : `text-${BRAND_COLORS.slate700} border-${BRAND_COLORS.slate300} bg-white`
-            }`}
+            className={`px-4 py-2 rounded-lg font-medium text-sm flex-shrink-0 transition-all border flex items-center gap-2 ${filterType === 'health-center'
+              ? 'text-white border-transparent'
+              : `text-${BRAND_COLORS.textPrimary} border-${BRAND_COLORS.border} bg-white`
+              }`}
             style={{
               backgroundColor: filterType === 'health-center' ? BRAND_COLORS.success : 'white',
-              color: filterType === 'health-center' ? 'white' : BRAND_COLORS.slate700,
-              borderColor: filterType === 'health-center' ? 'transparent' : BRAND_COLORS.slate300
+              color: filterType === 'health-center' ? 'white' : BRAND_COLORS.textPrimary,
+              borderColor: filterType === 'health-center' ? 'transparent' : BRAND_COLORS.border
             }}
           >
             <Heart className="w-4 h-4" />
@@ -404,7 +390,7 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
         </div>
 
         {/* Results Count */}
-        <p className="text-sm font-medium" style={{ color: BRAND_COLORS.slate600 }}>
+        <p className="text-sm font-medium" style={{ color: BRAND_COLORS.textSecondary }}>
           {filteredFacilities.length} {filteredFacilities.length === 1 ? 'facility' : 'facilities'} found
         </p>
 
@@ -413,16 +399,16 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
           <div className="space-y-4">
             {filteredFacilities.map((facility) => (
               <div key={facility.id} className="bg-white rounded-xl shadow-sm overflow-hidden border transition-all hover:shadow-md"
-                style={{ borderColor: BRAND_COLORS.slate300 }}>
+                style={{ borderColor: BRAND_COLORS.border }}>
                 {/* Top Color Bar */}
-                <div 
+                <div
                   className="h-1 w-full"
-                  style={{ 
-                    backgroundColor: facility.type === 'hospital' 
-                      ? BRAND_COLORS.primary 
-                      : facility.type === 'clinic' 
-                      ? BRAND_COLORS.secondary 
-                      : BRAND_COLORS.success 
+                  style={{
+                    backgroundColor: facility.type === 'hospital'
+                      ? BRAND_COLORS.primary
+                      : facility.type === 'clinic'
+                        ? BRAND_COLORS.secondary
+                        : BRAND_COLORS.success
                   }}
                 />
 
@@ -432,7 +418,7 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-bold" style={{ color: BRAND_COLORS.slate700 }}>
+                        <h3 className="text-lg font-bold" style={{ color: BRAND_COLORS.textPrimary }}>
                           {facility.name}
                         </h3>
                         {facility.isOpen ? (
@@ -445,33 +431,33 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
                           </span>
                         )}
                       </div>
-                      
+
                       {/* Type Badge */}
                       <div className="flex items-center gap-2 mb-3">
-                        <div 
+                        <div
                           className="p-2 rounded-lg"
-                          style={{ 
-                            backgroundColor: facility.type === 'hospital' 
-                              ? `${BRAND_COLORS.primary}15` 
-                              : facility.type === 'clinic' 
-                              ? `${BRAND_COLORS.secondary}15` 
-                              : `${BRAND_COLORS.success}15` 
+                          style={{
+                            backgroundColor: facility.type === 'hospital'
+                              ? `${BRAND_COLORS.primary}15`
+                              : facility.type === 'clinic'
+                                ? `${BRAND_COLORS.secondary}15`
+                                : `${BRAND_COLORS.success}15`
                           }}
                         >
                           {getTypeIcon(facility.type)}
                         </div>
-                        <span className="text-xs font-semibold" style={{ color: BRAND_COLORS.slate600 }}>
+                        <span className="text-xs font-semibold" style={{ color: BRAND_COLORS.textSecondary }}>
                           {getTypeLabel(facility.type)}
                         </span>
                       </div>
 
                       {/* Rating & Distance */}
                       <div className="flex items-center gap-4 text-sm">
-                        <div className="flex items-center gap-1" style={{ color: BRAND_COLORS.slate600 }}>
+                        <div className="flex items-center gap-1" style={{ color: BRAND_COLORS.textSecondary }}>
                           <Star className="w-4 h-4" style={{ color: '#FBBF24', fill: '#FBBF24' }} />
                           <span className="font-semibold">{facility.rating}</span>
                         </div>
-                        <div className="flex items-center gap-1" style={{ color: BRAND_COLORS.slate600 }}>
+                        <div className="flex items-center gap-1" style={{ color: BRAND_COLORS.textSecondary }}>
                           <Navigation className="w-4 h-4" />
                           <span className="font-medium">{facility.distance}</span>
                         </div>
@@ -481,15 +467,15 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
 
                   {/* Address */}
                   <div className="flex gap-2 mb-4">
-                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: BRAND_COLORS.slate600 }} />
-                    <p className="text-sm" style={{ color: BRAND_COLORS.slate600 }}>
+                    <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: BRAND_COLORS.textSecondary }} />
+                    <p className="text-sm" style={{ color: BRAND_COLORS.textSecondary }}>
                       {facility.address}
                     </p>
                   </div>
 
                   {/* Services */}
                   <div className="mb-4">
-                    <p className="text-xs font-semibold mb-2" style={{ color: BRAND_COLORS.slate600 }}>
+                    <p className="text-xs font-semibold mb-2" style={{ color: BRAND_COLORS.textSecondary }}>
                       SERVICES
                     </p>
                     <div className="flex flex-wrap gap-2">
@@ -497,7 +483,7 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
                         <span
                           key={index}
                           className="px-3 py-1 rounded-full text-xs font-medium"
-                          style={{ 
+                          style={{
                             backgroundColor: `${BRAND_COLORS.secondary}15`,
                             color: BRAND_COLORS.secondary
                           }}
@@ -506,7 +492,7 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
                         </span>
                       ))}
                       {facility.services.length > 3 && (
-                        <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ color: BRAND_COLORS.slate600 }}>
+                        <span className="px-3 py-1 rounded-full text-xs font-medium" style={{ color: BRAND_COLORS.textSecondary }}>
                           +{facility.services.length - 3} more
                         </span>
                       )}
@@ -540,14 +526,14 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
             ))}
 
             {filteredFacilities.length === 0 && (
-              <div className="bg-white rounded-xl shadow-sm p-12 text-center border" style={{ borderColor: BRAND_COLORS.slate300 }}>
+              <div className="bg-white rounded-xl shadow-sm p-12 text-center border" style={{ borderColor: BRAND_COLORS.border }}>
                 <div className="inline-block p-4 rounded-full mb-4" style={{ backgroundColor: `${BRAND_COLORS.secondary}15` }}>
                   <Search className="w-8 h-8" style={{ color: BRAND_COLORS.secondary }} />
                 </div>
-                <p className="font-semibold text-lg mb-2" style={{ color: BRAND_COLORS.slate700 }}>
+                <p className="font-semibold text-lg mb-2" style={{ color: BRAND_COLORS.textPrimary }}>
                   No Facilities Found
                 </p>
-                <p className="text-sm" style={{ color: BRAND_COLORS.slate600 }}>
+                <p className="text-sm" style={{ color: BRAND_COLORS.textSecondary }}>
                   Try adjusting your filters or search query
                 </p>
               </div>
@@ -564,17 +550,17 @@ export default function HospitalLocator({ onNavigate }: HospitalLocatorProps) {
           />
         )}
 
-      {/* Real-Time Map Modal with Live Directions */}
-      {showDirections && selectedFacility && (
-        <DirectionsModal
-          facility={selectedFacility}
-          onClose={() => {
-            setShowDirections(false);
-            setSelectedFacility(null);
-          }}
-          brandColors={BRAND_COLORS}
-        />
-      )}
+        {/* Real-Time Map Modal with Live Directions */}
+        {showDirections && selectedFacility && (
+          <DirectionsModal
+            facility={selectedFacility}
+            onClose={() => {
+              setShowDirections(false);
+              setSelectedFacility(null);
+            }}
+            brandColors={BRAND_COLORS}
+          />
+        )}
       </div>
     </div>
   );
@@ -632,7 +618,7 @@ function DirectionsModal({ facility, onClose, brandColors }: DirectionsModalProp
               lng: position.coords.longitude,
             };
             setUserLocation(userLoc);
-            
+
             // Initialize map
             if (mapContainer.current && !mapRef.current) {
               const L = (window as any).L;
@@ -745,9 +731,9 @@ function DirectionsModal({ facility, onClose, brandColors }: DirectionsModalProp
         if (mapRef.current) {
           const L = (window as any).L;
           const coordinates = route.geometry.coordinates.map((coord: number[]) => [coord[1], coord[0]]);
-          
+
           L.polyline(coordinates, {
-            color: '#1D62AF',
+            color: BRAND_COLORS.primary,
             weight: 5,
             opacity: 0.7,
           }).addTo(mapRef.current);
@@ -771,7 +757,7 @@ function DirectionsModal({ facility, onClose, brandColors }: DirectionsModalProp
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl overflow-hidden shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div 
+        <div
           className="text-white p-6 flex items-center justify-between"
           style={{ backgroundColor: brandColors.secondary }}
         >
@@ -793,7 +779,7 @@ function DirectionsModal({ facility, onClose, brandColors }: DirectionsModalProp
             <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
               <div className="text-center">
                 <Loader className="w-8 h-8 animate-spin mx-auto mb-3" style={{ color: brandColors.secondary }} />
-                <p style={{ color: brandColors.slate600 }}>Loading map...</p>
+                <p style={{ color: brandColors.textSecondary }}>Loading map...</p>
               </div>
             </div>
           )}
@@ -801,7 +787,7 @@ function DirectionsModal({ facility, onClose, brandColors }: DirectionsModalProp
         </div>
 
         {/* Info & Directions Footer */}
-        <div className="p-6 border-t" style={{ borderColor: brandColors.slate300 }}>
+        <div className="p-6 border-t" style={{ borderColor: brandColors.border }}>
           {error && (
             <div className="mb-4 p-3 bg-red-50 rounded-lg text-sm text-red-700">
               {error}
@@ -811,15 +797,15 @@ function DirectionsModal({ facility, onClose, brandColors }: DirectionsModalProp
           {routeData && (
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="bg-blue-50 rounded-lg p-4 text-center">
-                <p className="text-xs font-semibold" style={{ color: brandColors.slate600 }}>Distance</p>
+                <p className="text-xs font-semibold" style={{ color: brandColors.textSecondary }}>Distance</p>
                 <p className="text-2xl font-bold" style={{ color: brandColors.secondary }}>{routeData.distance} km</p>
               </div>
               <div className="bg-green-50 rounded-lg p-4 text-center">
-                <p className="text-xs font-semibold" style={{ color: brandColors.slate600 }}>Duration</p>
+                <p className="text-xs font-semibold" style={{ color: brandColors.textSecondary }}>Duration</p>
                 <p className="text-2xl font-bold" style={{ color: brandColors.success }}>{routeData.duration} min</p>
               </div>
               <div className="bg-purple-50 rounded-lg p-4 text-center">
-                <p className="text-xs font-semibold" style={{ color: brandColors.slate600 }}>Status</p>
+                <p className="text-xs font-semibold" style={{ color: brandColors.textSecondary }}>Status</p>
                 <p className="text-2xl font-bold" style={{ color: facility.isOpen ? brandColors.success : '#EF4444' }}>
                   {facility.isOpen ? 'Open' : 'Closed'}
                 </p>
@@ -839,7 +825,7 @@ function DirectionsModal({ facility, onClose, brandColors }: DirectionsModalProp
             <button
               onClick={onClose}
               className="flex-1 rounded-lg px-4 py-3 font-medium transition-all border-2"
-              style={{ borderColor: brandColors.slate300, color: brandColors.slate700 }}
+              style={{ borderColor: brandColors.border, color: brandColors.textSecondary }}
             >
               Close
             </button>
@@ -981,14 +967,14 @@ function InteractiveMapView({ facilities, onSelectFacility, brandColors }: Inter
   }, [facilities]);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden border" style={{ borderColor: brandColors.slate300 }}>
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden border" style={{ borderColor: brandColors.border }}>
       {/* Map Container */}
       <div className="relative" style={{ height: '500px' }}>
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/80 z-10">
             <div className="text-center">
               <Loader className="w-8 h-8 animate-spin mx-auto mb-3" style={{ color: brandColors.secondary }} />
-              <p style={{ color: brandColors.slate600 }}>Loading map...</p>
+              <p style={{ color: brandColors.textSecondary }}>Loading map...</p>
             </div>
           </div>
         )}
@@ -997,13 +983,13 @@ function InteractiveMapView({ facilities, onSelectFacility, brandColors }: Inter
 
       {/* Selected Facility Info */}
       {selectedMarker && (
-        <div className="p-4 border-t" style={{ borderColor: brandColors.slate300 }}>
+        <div className="p-4 border-t" style={{ borderColor: brandColors.border }}>
           <div className="flex items-start justify-between mb-3">
             <div>
-              <h3 className="font-bold text-lg" style={{ color: brandColors.slate700 }}>
+              <h3 className="font-bold text-lg" style={{ color: brandColors.textPrimary }}>
                 {selectedMarker.name}
               </h3>
-              <p className="text-sm" style={{ color: brandColors.slate600 }}>
+              <p className="text-sm" style={{ color: brandColors.textSecondary }}>
                 {selectedMarker.type === 'hospital' ? '🏥 Hospital' : selectedMarker.type === 'clinic' ? '⚕️ Clinic' : '💚 Health Center'}
               </p>
             </div>
@@ -1011,21 +997,21 @@ function InteractiveMapView({ facilities, onSelectFacility, brandColors }: Inter
               onClick={() => setSelectedMarker(null)}
               className="p-1 hover:bg-gray-100 rounded"
             >
-              <X className="w-5 h-5" style={{ color: brandColors.slate600 }} />
+              <X className="w-5 h-5" style={{ color: brandColors.textSecondary }} />
             </button>
           </div>
 
           <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className="text-center p-2 rounded" style={{ backgroundColor: `${brandColors.slate300}30` }}>
-              <p className="text-xs" style={{ color: brandColors.slate600 }}>Distance</p>
-              <p className="font-bold" style={{ color: brandColors.slate700 }}>{selectedMarker.distance}</p>
+            <div className="text-center p-2 rounded" style={{ backgroundColor: `${brandColors.border}30` }}>
+              <p className="text-xs" style={{ color: brandColors.textSecondary }}>Distance</p>
+              <p className="font-bold" style={{ color: brandColors.textPrimary }}>{selectedMarker.distance}</p>
             </div>
-            <div className="text-center p-2 rounded" style={{ backgroundColor: `${brandColors.slate300}30` }}>
-              <p className="text-xs" style={{ color: brandColors.slate600 }}>Rating</p>
-              <p className="font-bold" style={{ color: brandColors.slate700 }}>⭐ {selectedMarker.rating}</p>
+            <div className="text-center p-2 rounded" style={{ backgroundColor: `${brandColors.border}30` }}>
+              <p className="text-xs" style={{ color: brandColors.textSecondary }}>Rating</p>
+              <p className="font-bold" style={{ color: brandColors.textPrimary }}>⭐ {selectedMarker.rating}</p>
             </div>
-            <div className="text-center p-2 rounded" style={{ backgroundColor: `${brandColors.slate300}30` }}>
-              <p className="text-xs" style={{ color: brandColors.slate600 }}>Status</p>
+            <div className="text-center p-2 rounded" style={{ backgroundColor: `${brandColors.border}30` }}>
+              <p className="text-xs" style={{ color: brandColors.textSecondary }}>Status</p>
               <p className="font-bold" style={{ color: selectedMarker.isOpen ? brandColors.success : '#EF4444' }}>
                 {selectedMarker.isOpen ? 'Open' : 'Closed'}
               </p>
@@ -1055,28 +1041,28 @@ function InteractiveMapView({ facilities, onSelectFacility, brandColors }: Inter
 
       {/* Map Legend */}
       {!selectedMarker && (
-        <div 
+        <div
           className="p-4"
-          style={{ backgroundColor: brandColors.accent }}
+          style={{ backgroundColor: brandColors.surface }}
         >
-          <h4 className="text-sm font-bold mb-3" style={{ color: brandColors.slate700 }}>
+          <h4 className="text-sm font-bold mb-3" style={{ color: brandColors.textPrimary }}>
             🗺️ FACILITIES ({facilities.length})
           </h4>
           <div className="grid grid-cols-3 gap-3">
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: brandColors.primary }}></div>
-              <span className="text-xs font-medium" style={{ color: brandColors.slate600 }}>Hospital</span>
+              <span className="text-xs font-medium" style={{ color: brandColors.textSecondary }}>Hospital</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: brandColors.secondary }}></div>
-              <span className="text-xs font-medium" style={{ color: brandColors.slate600 }}>Clinic</span>
+              <span className="text-xs font-medium" style={{ color: brandColors.textSecondary }}>Clinic</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: brandColors.success }}></div>
-              <span className="text-xs font-medium" style={{ color: brandColors.slate600 }}>Health Center</span>
+              <span className="text-xs font-medium" style={{ color: brandColors.textSecondary }}>Health Center</span>
             </div>
           </div>
-          <p className="text-xs mt-3" style={{ color: brandColors.slate600 }}>
+          <p className="text-xs mt-3" style={{ color: brandColors.textSecondary }}>
             💡 Click markers to view details and get directions
           </p>
         </div>
