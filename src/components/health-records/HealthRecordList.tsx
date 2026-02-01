@@ -1,21 +1,27 @@
 import { useState, useRef } from 'react'
 import { FileText, Calendar, Check } from 'lucide-react'
 import { BRAND_COLORS } from '../../constants/colors'
-import { MedicalRecord, mockRecords } from './types'
+import { MedicalRecord } from './types'
 
 interface HealthRecordListProps {
+  records: MedicalRecord[]
   onSelectRecord: (record: MedicalRecord) => void
   getIcon: (type: string) => React.ReactNode
   getTypeColor: (type: string) => { bg: string; text: string; icon: string }
 }
 
-export default function HealthRecordList({ onSelectRecord, getIcon, getTypeColor }: HealthRecordListProps) {
+export default function HealthRecordList({ 
+  records,
+  onSelectRecord, 
+  getIcon, 
+  getTypeColor 
+}: HealthRecordListProps) {
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'completed'>('all')
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadSuccess, setUploadSuccess] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const filteredRecords = mockRecords.filter(record =>
+  const filteredRecords = records.filter(record =>
     filterStatus === 'all' || record.status === filterStatus
   )
 

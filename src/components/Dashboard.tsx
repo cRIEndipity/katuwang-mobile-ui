@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Stethoscope } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
+import { Stethoscope, LogOut } from 'lucide-react'
 import { BRAND_COLORS } from '../constants/colors'
 import { Screen } from "../types"
 import katuwangLogo from '../assets/logos/katuwang-logo.png'
@@ -15,19 +16,31 @@ interface DashboardProps {
 
 export default function Dashboard({ onNavigate }: DashboardProps) {
   const [isHospitalModalOpen, setIsHospitalModalOpen] = useState(false)
+  const { signOut } = useAuth()
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.background }}>
       {/* Header */}
       <header style={{ backgroundColor: BRAND_COLORS.primary }} className="text-white">
-        <div className="container mx-auto px-4 py-5 flex items-center gap-4">
-          <div className="bg-white rounded-full p-1 backdrop-blur-sm">
-            <img src={katuwangLogo} alt="Katuwang Logo" className="w-14 h-14 object-contain" />
+        <div className="container mx-auto px-4 py-5 flex items-center justify-between">
+          {/* Logo and Title Group */}
+          <div className="flex items-center gap-4">
+            <div className="bg-white rounded-full p-1 backdrop-blur-sm">
+                <img src={katuwangLogo} alt="Katuwang Logo" className="w-14 h-14 object-contain" />
+            </div>
+            <div>
+                <h1 className="text-2xl font-bold tracking-tight">KATUWANG</h1>
+                <p className="text-white/90 text-sm">Your Health Companion</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">KATUWANG</h1>
-            <p className="text-white/90 text-sm">Your Health Companion</p>
-          </div>
+          
+          <button 
+            onClick={signOut}
+            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+            title="Sign Out"
+          >
+            <LogOut className="w-6 h-6" />
+          </button>
         </div>
       </header>
 

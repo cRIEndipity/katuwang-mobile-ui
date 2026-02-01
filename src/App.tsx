@@ -5,7 +5,9 @@
  */
 
 import { useState } from "react"
+import { AuthProvider, useAuth } from "./context/AuthContext"
 import { Screen } from "./types"
+import LoginScreen from "./components/LoginScreen"
 import Dashboard from "./components/Dashboard"
 import HealthAssistant from "./components/health-assistant/HealthAssistant"
 import EmergencyActivation from "./components/emergency/EmergencyActivation"
@@ -13,10 +15,19 @@ import EmergencyContacts from "./components/contacts/EmergencyContacts"
 import HealthRecords from "./components/health-records/HealthRecords"
 import HospitalLocator from "./components/hospitals/HospitalLocator"
 
-export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>("dashboard");
+function MainApp() {
+  const { session, loading } = useAuth()
+  const [currentScreen, setCurrentScreen] = useState<Screen>("dashboard")
 
   const navigateTo = (screen: Screen) => setCurrentScreen(screen)
+
+  if (loading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">Loading...</div>
+  }
+
+  if (!session) {
+    return <LoginScreen onLoginSuccess={() => {}} />
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -55,5 +66,13 @@ export default function App() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainApp />
+    </AuthProvider>
   );
 }
