@@ -2,45 +2,25 @@
  * KATUWANG - Professional Health Module for MyNaga Super App
  * "Ang Kaagapay Mo sa Kalusugan"
  * Team: TEAM NAGANA
- *
- * Complete redesign with professional aesthetics and advanced features
  */
 
-import { useState } from "react";
-import { Screen } from "./types";
-import UserTypeSelection from "./components/UserTypeSelection";
-import Dashboard from "./components/Dashboard";
-import HealthAssistant from "./components/HealthAssistant";
-import EmergencyActivation from "./components/EmergencyActivation";
-import HospitalLocator from "./components/HospitalLocator";
-import EmergencyContacts from "./components/EmergencyContacts";
-import HealthRecords from "./components/HealthRecords";
-
-
-
+import { useState } from "react"
+import { Screen } from "./types"
+import Dashboard from "./components/Dashboard"
+import HealthAssistant from "./components/health-assistant/HealthAssistant"
+import EmergencyActivation from "./components/emergency/EmergencyActivation"
+import EmergencyContacts from "./components/contacts/EmergencyContacts"
+import HealthRecords from "./components/health-records/HealthRecords"
+import HospitalLocator from "./components/hospitals/HospitalLocator"
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] =
-    useState<Screen>("user-type");
+  const [currentScreen, setCurrentScreen] = useState<Screen>("dashboard");
 
-  const handleHealthSelect = () => {
-    setCurrentScreen("dashboard");
-  };
-
-  const navigateTo = (screen: Screen) => {
-    setCurrentScreen(screen);
-  };
-
-
+  const navigateTo = (screen: Screen) => setCurrentScreen(screen)
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-md min-h-screen">
-        {currentScreen === "user-type" && (
-          <UserTypeSelection
-            onSelect={handleHealthSelect}
-          />
-        )}
         {currentScreen === "dashboard" && (
           <Dashboard
             onNavigate={navigateTo}

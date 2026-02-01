@@ -3,12 +3,10 @@ export type Screen =
     | "dashboard"
     | "health-assistant"
     | "emergency"
-
     | "hospitals"
     | "contacts"
     | "health-records"
     | "entry"
     | "telemedicine"
     | "pharmacy"
-    | "hospital-directory";
-;
+    | "hospital-directory"
