@@ -37,6 +37,7 @@ const BRAND_COLORS = {
   slate700: '#334155',
   slate600: '#475569',
   slate300: '#CBD5E1',
+  black: '#000000',
 };
 
 export default function UserTypeSelection({ onSelect }: UserTypeSelectionProps) {
