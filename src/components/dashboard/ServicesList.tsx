@@ -3,7 +3,7 @@ import { BRAND_COLORS } from '../../constants/colors'
 import { Screen } from '../../types'
 
 const SERVICES = [
-  { id: 'health-assistant', title: 'Health Assistant', description: 'AI-powered guidance', icon: Bot, iconColor: BRAND_COLORS.secondary, status: 'Online', statusColor: BRAND_COLORS.secondary },
+  { id: 'health-assistant', title: 'Health Assistant', description: 'AI-powered guidance', icon: Bot, iconColor: BRAND_COLORS.secondary, status: 'Beta', statusColor: BRAND_COLORS.secondary },
   { id: 'emergency', title: 'Emergency Alert', description: 'Immediate assistance', icon: AlertCircle, iconColor: BRAND_COLORS.danger, isEmergency: true },
   { id: 'contacts', title: 'Emergency Contacts', description: 'Manage trusted contacts', icon: Users, iconColor: BRAND_COLORS.primary },
   { id: 'hospitals', title: 'Find Hospitals', description: 'Locate nearby facilities', icon: Hospital, iconColor: BRAND_COLORS.accent },
