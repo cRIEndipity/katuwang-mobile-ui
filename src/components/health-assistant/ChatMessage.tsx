@@ -1,6 +1,7 @@
 import { Bot, User } from 'lucide-react'
 import { BRAND_COLORS } from '../../constants/colors'
 import { Message } from './types'
+import { MarkdownContent } from '../MarkdownContent'
 
 interface ChatMessageProps {
   message: Message
@@ -34,7 +35,11 @@ export default function ChatMessage({ message, onOptionClick }: ChatMessageProps
             boxShadow: isBot ? '0 2px 4px rgba(0,0,0,0.05)' : '0 2px 4px rgba(29, 98, 175, 0.2)'
           }}
         >
-          {message.text}
+          <MarkdownContent 
+            content={message.text} 
+            compact={true} 
+            inverted={isBot}
+          />
         </div>
         
         <span className="text-[10px] text-gray-400 mt-1 px-1">
