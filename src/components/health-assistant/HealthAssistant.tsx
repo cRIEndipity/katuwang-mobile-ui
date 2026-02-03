@@ -6,6 +6,7 @@ import { categories, symptoms } from './data'
 import { analyzeSymptom, getEmergencyResponse } from './SymptomChecker'
 import ChatMessage from './ChatMessage'
 import ChatInput from './ChatInput'
+import { getGeminiResponse } from '../../services/gemini'
 
 interface HealthAssistantProps {
   onNavigate: (screen: Screen) => void
@@ -132,20 +133,34 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return
     
-    addMessage('user', inputMessage.trim())
-    setInputMessage('')
-    await simulateTyping(1000)
+    const userText = inputMessage.trim()
 
-    // Simple keyword detection
-    const lower = inputMessage.toLowerCase()
-    if (lower.includes('emergency') || lower.includes('911') || lower.includes('bleed')) {
-       const response = getEmergencyResponse()
-       addMessage('bot', response.text, 'result', response.options)
-    } else if (lower.includes('fever')) {
-       setCurrentSymptomId('fever')
-       addMessage('bot', 'It sounds like you have a fever. How high is the temperature?', 'options', ['level1', 'level2', 'level3', 'not-sure'])
-    } else {
-       addMessage('bot', 'I understand. Could you provide more specific details or select a category from the menu?', 'options', categories.map(c => c.id))
+    addMessage('user', userText)
+    setInputMessage('')
+    setIsTyping(true)
+
+    try {
+      // Safety/Emergency Override
+      const lower = userText.toLowerCase()
+
+      if (lower.includes('emergency') || lower.includes('911') || lower.includes('bleed')) {
+        await simulateTyping(1000)
+
+        const response = getEmergencyResponse()
+        addMessage('bot', response.text, 'result', response.options)
+        setIsTyping(false)
+
+        return
+      }
+
+      // Call Gemini Service
+      const responseText = await getGeminiResponse(messages, userText)
+
+      setIsTyping(false)
+      addMessage('bot', responseText)
+    } catch (error) {
+      setIsTyping(false)
+      addMessage('bot',  "I'm having a bit of trouble connecting. Please check your internet connection.")
     }
   }
 
