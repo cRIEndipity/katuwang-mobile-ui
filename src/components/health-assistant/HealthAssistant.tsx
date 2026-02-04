@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { ChevronLeft, AlertTriangle } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
+import { supabase } from '../../lib/supabase'
+import { ChevronLeft, AlertTriangle, Menu, Plus, MessageSquare } from 'lucide-react'
 import { Screen } from "../../types"
 import { Message } from './types'
 import { categories, symptoms } from './data'
@@ -12,7 +14,14 @@ interface HealthAssistantProps {
   onNavigate: (screen: Screen) => void
 }
 
+interface Session {
+  id: string
+  title: string
+  created_at: string
+}
+
 export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
+  const { session } = useAuth()
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
@@ -28,15 +37,85 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
   const [currentSymptomId, setCurrentSymptomId] = useState<string | null>(null)
   const [inputMessage, setInputMessage] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [sessions, setSessions] = useState<Session[]>([])
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  // Load Sessions list
+  useEffect(() => {
+    if (!session?.user) return
+
+    const loadSessions = async () => {
+      const { data } = await supabase
+        .from('chat_sessions')
+        .select('*')
+        .eq('user_id', session?.user.id)
+        .order('created_at', { ascending: false })
+
+      if (data) {
+        setSessions(data)
+      }
+    }
+
+    loadSessions()
+  }, [session])
+
+  // Load chat history from Supabase on mount
+  useEffect(() => {
+    if (!session?.user) return
+
+    const loadHistory = async () => {
+      // If no session selected, show welcome message
+      if (!currentSessionId) {
+        setMessages([
+          {
+            id: 'welcome',
+            sender: 'bot',
+            text: '## 🏥 Naga City Health Assistant\n\n**Katuwang:** Your trusted health companion\n\n*Powered by Naga City Health Department*\n\nI can help you assess symptoms, provide first aid guidance, and connect you with local health resources. How may I assist you today?',
+            timestamp: new Date(),
+            type: 'options',
+            options: ['symptoms', 'firstaid', 'chronic', 'prevention', 'lifestyle', 'maternal']
+          }
+        ])
+        return
+      }
+
+      // Load specific session messages
+      const { data } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .eq('session_id', currentSessionId)
+        .order('created_at', { ascending: true })
+
+      if (data) {
+        const history: Message[] = data.map(msg => ({
+          id: msg.id,
+          sender: msg.role as 'user' | 'bot',
+          text: msg.content,
+          timestamp: new Date(msg.created_at),
+          type: 'text'
+        }))
+
+        setMessages(history)
+      }
+    }
+
+    loadHistory()
+  }, [session, currentSessionId])
 
   useEffect(() => {
     scrollToBottom()
   }, [messages, isTyping])
+
+  const handleNewChat = () => {
+    setCurrentSessionId(null)
+    setIsSidebarOpen(false)
+  }
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const addMessage = (sender: 'bot' | 'user', text: string, type: 'text' | 'options' | 'result' = 'text', options?: string[]) => {
     const newMessage: Message = {
@@ -140,33 +219,116 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
     setIsTyping(true)
 
     try {
-      // Safety/Emergency Override
-      const lower = userText.toLowerCase()
+      let activeSessionId = currentSessionId
 
-      if (lower.includes('emergency') || lower.includes('911') || lower.includes('bleed')) {
+      // Create new session if needed
+      if (!activeSessionId && session?.user) {
+        const title = userText.slice(0, 30) + (userText.length > 30 ? '...' : '')
+        const { data: newSession } = await supabase
+          .from('chat_sessions')
+          .insert({
+            user_id: session.user.id,
+            title: title
+          })
+          .select()
+          .single()
+
+        if (newSession) {
+          activeSessionId = newSession.id
+          setCurrentSessionId(newSession.id)
+          
+          setSessions(prev => [newSession, ...prev])
+        }
+      }
+
+      // Save USER message to Supabase
+      if (session?.user && activeSessionId) {
+        await supabase.from('chat_messages').insert({
+          session_id: activeSessionId,
+          user_id: session.user.id,
+          role: 'user',
+          content: userText
+        })
+      }
+
+      // Emergency Checks 
+      const lower = userText.toLowerCase()
+      if (lower.includes('emergency') || lower.includes('911') || lower.includes ('bleed')) {
         await simulateTyping(1000)
 
         const response = getEmergencyResponse()
         addMessage('bot', response.text, 'result', response.options)
         setIsTyping(false)
-
-        return
       }
 
-      // Call Gemini Service
+      // Call Gemini API
       const responseText = await getGeminiResponse(messages, userText)
-
       setIsTyping(false)
       addMessage('bot', responseText)
+
+      // Save BOT response to Supabase
+      if (session?.user && activeSessionId) {
+        await supabase.from('chat_messages').insert({
+          session_id: activeSessionId,
+          user_id: session.user.id,
+          role: 'bot',
+          content: responseText
+        })
+      }
+
     } catch (error) {
+      console.error(error)
       setIsTyping(false)
       addMessage('bot',  "I'm having a bit of trouble connecting. Please check your internet connection.")
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-50 flex flex-col relative overflow-hidden">
+      {/* Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div 
+          className="absolute inset-0 bg-black/50 z-20"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar Drawer */}
+      <div className={`
+        absolute top-0 right-0 h-full w-64 bg-white shadow-xl z-30 transform transition-transform duration-300 ease-in-out
+        ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'}
+      `}>
+        <div className="p-4 flex flex-col h-full">
+          <button 
+            onClick={handleNewChat}
+            className="w-full flex items-center justify-center gap-2 bg-emerald-600 text-white py-2 rounded-lg mb-4 hover:bg-emerald-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" /> New Chat
+          </button>
+          
+          <h2 className="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wider">History</h2>
+          
+          <div className="flex-1 overflow-y-auto space-y-2">
+            {sessions.map(s => (
+              <button
+                key={s.id}
+                onClick={() => {
+                  setCurrentSessionId(s.id)
+                  setIsSidebarOpen(false)
+                }}
+                className={`w-full text-left p-3 rounded-lg text-sm flex items-start gap-3 transition-colors ${
+                  currentSessionId === s.id ? 'bg-emerald-50 text-emerald-700' : 'hover:bg-gray-50 text-gray-700'
+                }`}
+              >
+                <MessageSquare className="w-4 h-4 mt-0.5 shrink-0" />
+                <span className="line-clamp-2">{s.title || 'Untitled Chat'}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Header (Updated with Menu Button) */}
       <div className="bg-white border-b shadow-sm sticky top-0 z-10">
         <div className="px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -181,9 +343,19 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
                 </div>
               </div>
             </div>
-            <button onClick={() => onNavigate('emergency')} className="p-2 bg-red-50 text-red-600 rounded-lg">
-              <AlertTriangle className="w-5 h-5" />
-            </button>
+            
+            <div className="flex items-center gap-2">
+              <button onClick={() => onNavigate('emergency')} className="p-2 bg-red-50 text-red-600 rounded-lg">
+                <AlertTriangle className="w-5 h-5" />
+              </button>
+              {/* Menu Button */}
+              <button 
+                onClick={() => setIsSidebarOpen(true)}
+                className="p-2 hover:bg-gray-100 rounded-lg text-emerald-600"
+              >
+                <Menu className="w-5 h-5" />
+              </button>
+            </div>
         </div>
       </div>
 
@@ -196,6 +368,7 @@ export default function HealthAssistant({ onNavigate }: HealthAssistantProps) {
             onOptionClick={handleOptionClick} 
           />
         ))}
+
         {isTyping && (
            <div className="flex items-center gap-2 text-gray-400 text-xs ml-12">
              <span className="animate-bounce">●</span>
