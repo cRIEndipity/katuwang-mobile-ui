@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { BRAND_COLORS } from '../constants/colors'
-import katuwangLogo from '../assets/logos/katuwang-logo.png'
 import { Mail, Lock, AlertCircle, ArrowRight, Eye, EyeOff } from 'lucide-react'
 
 interface LoginScreenProps {
@@ -78,6 +77,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
       setLoading(false)
     }
   }
+
+  const katuwangLogo = '/assets/katuwang-logo.png'
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50/50">

@@ -3,7 +3,6 @@ import { useAuth } from '../context/AuthContext'
 import { Stethoscope, LogOut } from 'lucide-react'
 import { BRAND_COLORS } from '../constants/colors'
 import { Screen } from "../types"
-import katuwangLogo from '../assets/logos/katuwang-logo.png'
 import HealthTipSection from './dashboard/HealthTipSection'
 import EmergencyHotlines from './dashboard/EmergencyHotlines'
 import ServicesList from './dashboard/ServicesList'
@@ -17,6 +16,8 @@ interface DashboardProps {
 export default function Dashboard({ onNavigate }: DashboardProps) {
   const [isHospitalModalOpen, setIsHospitalModalOpen] = useState(false)
   const { signOut } = useAuth()
+
+  const katuwangLogo = '/assets/katuwang-logo.png'
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: BRAND_COLORS.background }}>
